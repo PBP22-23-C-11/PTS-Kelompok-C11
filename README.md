@@ -1,4 +1,4 @@
-# 🐝 buzzar-id 🐝
+# buzzar-id 🐝
 Sebuah wadah bagi para pemilik UMKM dan pelanggan untuk berinteraksi dan mengenal karya wirausaha.<br> 
 Proyek ini dibuat untuk memenuhi Proyek Tugas Tengah Semester mata kuliah Pemrograman Berbasis Plaform oleh Fakultas Ilmu Komputer Universitas Indonesia pada Tahun Ajaran 2022/2023 
 
