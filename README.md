@@ -1,60 +1,61 @@
 # buzzar-id 🐝
-Sebuah wadah bagi para pemilik UMKM dan pelanggan untuk berinteraksi dan mengenal karya wirausaha.<br> 
-Proyek ini dibuat untuk memenuhi Proyek Tugas Tengah Semester mata kuliah Pemrograman Berbasis Plaform oleh Fakultas Ilmu Komputer Universitas Indonesia pada Tahun Ajaran 2022/2023 
+Sebuah wadah bagi para pemilik UMKM dan pelanggan untuk berinteraksi dan mengenal karya wirausaha.<br>
 
-## Anggota Kelompok
+Proyek ini dibuat untuk memenuhi Proyek Tengah Semester Mata Kuliah Pemrograman Berbasis Platform (PBP) oleh Fakultas Ilmu Komputer Universitas Indonesia pada Tahun Ajaran 2022/2023.
+
+## 🧑‍🤝‍🧑 Anggota Kelompok
 Proyek ini dibuat oleh kelompok C-11 yang beranggotakan:
-1. Ahmad Hanif Adisetya (2106750603)
-2. Emir Shamsuddin Fadhlurrahman (2106632541)
-3. Kevin Alexander (2106705026)
-4. Muhammad Nabiel Andityo Purnomo (2106750465)
-5. Vania Azria Wardani (2106650380)
+1. [Ahmad Hanif Adisetya (2106750603)](https://github.com/ahmadhanif3)
+2. [Emir Shamsuddin Fadhlurrahman (2106632541)](https://github.com/Emyr298)
+3. [Kevin Alexander (2106705026)](https://github.com/kevin-alex-12)
+4. [Muhammad Nabiel Andityo Purnomo (2106750465)](https://github.com/mnabielap)
+5. [Vania Azria Wardani (2106650380)](https://github.com/vaniaazr)
 
-## Link Aplikasi Heroku
+## 🌎 Aplikasi Heroku
 https://buzzar-id.herokuapp.com/
 
-## Overview
-Forum G20 merupakan forum kerja sama multilateral yang terdiri dari 19 negara utama dan Uni Eropa. G20 dibentuk pada 1999 atas inisiasi anggota G7. Forum G20 merangkul negara maju dan berkembang untuk bersama-sama mengatasi krisis dan bertujuan mewujudkan pertumbuhan global yang kuat, berkelanjutan, seimbang, dan inklusif. Pada tahun 2022, Indonesia memegang presidensi G20. Tema Presidensi G20 Indonesia 2022 yang diusung adalah *Recover Together, Recover Stronger*. Dengan tema tersebut, Indonesia mengajak seluruh dunia untuk saling mendukung pulih bersama serta tumbuh lebih kuat dan berkelanjutan. 
+## 📝 Overview
+Forum G20 merupakan forum kerja sama multilateral yang terdiri dari 19 negara utama dan Uni Eropa. G20 dibentuk pada tahun 1999 atas inisiasi anggota G7. Forum G20 merangkul negara maju dan berkembang untuk bersama-sama mengatasi krisis dan bertujuan mewujudkan pertumbuhan global yang kuat, berkelanjutan, seimbang, dan inklusif. Pada tahun 2022, Indonesia memegang presidensi G20. Tema Presidensi G20 Indonesia 2022 yang diusung adalah *Recover Together, Recover Stronger*. Dengan tema tersebut, Indonesia mengajak seluruh dunia untuk saling mendukung pulih bersama serta tumbuh lebih kuat dan berkelanjutan. 
 <br><br>
-Salah satu isu utama yang diusung pada G20 tahun ini adalah **Transformasi Digital**. Menerapkan digitalisasi terhadap tatanan ekonomi dapat memulihkannya serta menjadi lebih kuat, inklusif dan kolaboratif. Salah satu kunci dalam pemulihan tatanan ekonomi adalah dengan pemberdayaan UMKM untuk mengakselerasikannya. Kelompok kami mencoba untuk memperdayakan hal tersebut, maka kami usung web aplikasi yang bernama **buzzar**.
+Salah satu isu utama yang diusung pada G20 tahun ini adalah **Transformasi Digital**. Menerapkan digitalisasi terhadap tatanan ekonomi dapat memulihkannya serta menjadi lebih kuat, inklusif dan kolaboratif. Salah satu kunci dalam pemulihan tatanan ekonomi adalah dengan pemberdayaan UMKM untuk mengakselerasikannya. Kelompok kami mencoba untuk memperdayakan hal tersebut, maka kami usung web aplikasi yang bernama **buzzar-id**. **buzzar-id** berfungsi sebagai wadah bagi para pemilik UMKM dan pelanggan untuk berinteraksi dan mengenal karya wirausaha.
 <br><br>
-Fitur utamanya tentu saja adalah adanya kumpulan UMKM yang telah memiliki cabang digital di tempat lain dan tidak menutup kemungkinan juga UMKM yang belum memiliki cabang digital dapat bergabung.
+Pada **buzzar-id**, terdapat lima fitur utama yang dapat diakses oleh pengguna. Fitur pertama yaitu fitur _showcase_ dimana berbagai UMKM yang telah memiliki cabang digital di tempat lain akan ditampilkan. Meskipun begitu, tidak menutup kemungkinan bagi UMKM yang belum memiliki cabang digital untuk dapat bergabung. Fitur kedua yaitu fitur _news_ dimana pemilik UMKM dan _admin_ dapat mempublikasikan informasi menarik seperti promosi, dsb. yang nantinya dapat dilihat oleh para _customer_. Fitur ketiga yaitu fitur forum dimana _customer_ dapat berbincang dengan pemilik UMKM. Hal ini biasanya sulit dilakukan karena jarang pemilik UMKM menyediakan layanan ini secara daring. Fitur keempat yaitu fitur _products_ dimana _customer_ dapat melihat produk-produk yang ditawarkan oleh UMKM dalam berbagai cabang digital. Fitur kelima yaitu fitur _competition_ dimana pemilik UMKM dapat melombakan desain produknya dan memperoleh _vote_ dari para _customer_ pada durasi _event_. Umumnya penyelenggara dari kompetisi desain produk adalah _admin_.
 <br><br>
-Selain itu terdapat juga fitur news untuk menampilkan berbagai informasi menarik yang dapat diisi oleh UMKM, seperti promosi, informasi, dan hal-hal lainnya.
-<br><br>
-Fitur lainnya yang tidak kalah penting adalah Obrolan UMKM. Pada fitur ini, pengguna dapat berbincang dengan pemilik UMKM, hal yang biasanya sulit dilakukan karena biasanya pemilik UMKM tidak menyediakan layanan secara daring.
-<br><br>
-Dengan adanya situs web ini, kami ingin masyarakat umum dapat lebih mudah dalam pencarian UMKM beserta informasi-informasinya sehingga UMKM-UMKM tersebut dapat berkembang dengan lebih baik.
+Dengan adanya situs ini, kami harap masyarakat umum dapat lebih mudah dalam mencari UMKM beserta informasi-informasinya sehingga UMKM-UMKM tersebut dapat berkembang dengan lebih baik.
 
-## Daftar Modul
+## 📝 Daftar Modul
 Berikut adalah daftar modul yang akan kami implementasikan.
-1. News: Menampilkan informasi dari berbagai UMKM dan Admin (Maintenance, lomba, dsb.). Pengguna dapat melakukan _filter_ berdasarkan UMKM, kategori, dsb. Pengguna juga dapat melakukan _subscribe_ pada beberapa UMKM dan dapat melakukan _filter_ pada news sedemikian sehingga hanya UMKM yang di-_subscribe_-lah yang dapat dilihat.
+- _Showcase_ - [Ahmad Hanif Adisetya](https://github.com/ahmadhanif3)
+- _Products_ - [Vania Azria Wardani](https://github.com/vaniaazr)
+- _News_ - [Emir Shamsuddin Fadhlurrahman](https://github.com/Emyr298)
+- Forum - [Muhammad Nabiel Andityo Purnomo](https://github.com/mnabielap)
+- _Competition_ - [Kevin Alexander](https://github.com/kevin-alex-12)
 
-2. Showcase: Menampilkan daftar UMKM. Kita bisa melakukan _filter_ dan _sort_. Ketika UMKM diklik, data dari UMKM yang diklik akan ditampilkan. Data tersebut contohnya adalah nama, sebagian produk, dll.
+## 👨 Peran Pengguna
+### **Pengguna Tidak _Logged-In_**    
+Hanya memiliki _basic features_:
+- Melihat daftar UMKM
+- Melihat produk-produk dari berbagai UMKM
+- Melihat berita dari UMKM dan _admin_
+- Melihat diskusi-diskusi _customer_ dengan pemilik UMKM
+- Melihat desain produk yang diikutsertakan dalam kompetisi
 
-3. Products: Menampilkan produck-produk. Bisa di-_filter_ untuk seluruh UMKM atau UMKM spesifik. Redirect ke shoppee, tokopedia, etc. (multi-toko)
+### **Pengguna _Logged-In_**
+#### **UMKM**
+Memiliki semua _basic features_ dengan tambahan:
+- Menambahkan dan mengubah data UMKM
+- Menambahkan produk
+- Menambahkan berita terkait UMKM
+- Menambahkan dan membalas obrolan pada forum diskusi UMKM
+- Mengikutsertakan desain produk pada kompetisi
 
-4. Lomba -> Tiap bulan ada program dimana tiap umkm bisa berlomba2 jadi yang terbaik -> Hadiah Modal usaha, showcase top umkm per bulan
+#### **Customer**   
+Memiliki semua _basic features_ dengan tambahan:
+- Memberi _rating_ pada suatu UMKM
+- Memberi _rating_ pada suatu produk
+- Me-_like_ UMKM dan menampilkan berita dari UMKM yang di-_like_ saja
+- Menambahkan dan membalas obrolan pada forum diskusi UMKM
+- Melakukan _voting_ pada desain produk dalam kompetisi
 
-5. Obrolan UMKM -> Pengguna bisa ngobrol2 dengan pemilik UMKM
-
-## Peran Pengguna
-Pengguna yang login dibagi menjadi 2, pemilik UMKM dan pengguna/customer.
-
-### **UMKM**    
-Memiliki semua basic features dengan tambahan:
-1) Menambahkan UMKM pada saat registrasi (Untuk showcase & lomba)
-2) Menambahkan produk yang dia miliki (Untuk products & lomba)
-3) Bisa melihat lomba & menambahkan, namun tidak bisa vote
-4) Bisa menambah obrolan pada obrolan UMKM
-
-### **Pengguna/customer**   
-Memiliki semua basic features dengan tambahan:
-1) Bisa akses dan melakukan vote di bagian lomba
-2) Bisa menambah obrolan pada obrolan UMKM
-
-### **Pengguna tidak login**    
-Hanya memiliki basic features:
-1) Bisa melihat news dengan tambahan 2 subseksi yaitu news utama dan news dari admin
-2) Melihat showcase
-3) Melihat products 
+## 📝 Referensi
+- https://www.bi.go.id/id/g20/default.aspx
