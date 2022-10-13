@@ -41,23 +41,7 @@ Berikut adalah daftar modul yang akan kami implementasikan.
 ## Peran Pengguna 👥
 Pengguna yang login dibagi menjadi 2, pemilik UMKM dan pengguna/customer.
 
-<<<<<<< HEAD
 **Pengguna tidak login**<br>    
-=======
-### **UMKM**    
-Memiliki semua basic features dengan tambahan:
-1) Menambahkan UMKM pada saat registrasi (Untuk showcase & lomba)
-2) Menambahkan produk yang dia miliki (Untuk products & lomba)
-3) Bisa melihat lomba & menambahkan, namun tidak bisa vote
-4) Bisa menambah obrolan pada obrolan UMKM
-
-### **Pengguna/customer**   
-Memiliki semua basic features dengan tambahan:
-1) Bisa akses dan melakukan vote di bagian lomba
-2) Bisa menambah obrolan pada obrolan UMKM
-
-### **Pengguna tidak login**    
->>>>>>> 8be78d70d5c7d4d6023b993ec41a2589686959c3
 Hanya memiliki basic features:
 1) Melihat news 
 2) Melihat showcase UMKM
