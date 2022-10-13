@@ -40,7 +40,6 @@ Hanya memiliki _basic features_:
 3) Melihat produk-produk UMKM
 4) Melihat lomba dan sesuatu yang diikutsertakan ke dalam lomba
 5) Melihat kumpulan diskusi pada suatu UMKM
-<br> 
 
 ### **Pengguna _Logged-In_**<br>  
 #### **UMKM**<br>    
@@ -50,7 +49,6 @@ Memiliki semua basic features dengan tambahan:
 3) Menambahkan produk
 4) Ikutserta dalam perlombaan
 5) Menambahkan dan menjawab diskusi
-<br>
 
 #### **_Customer_**<br>   
 Memiliki semua basic features dengan tambahan:
