@@ -1,62 +1,64 @@
-# Template Proyek Django PBP
+## buzzar-id
+Sebuah wadah bagi para pemilik UMKM dan pelanggan untuk berinteraksi dan mengenal karya wirausaha.<br> 
+Proyek ini dibuat untuk memenuhi Proyek Tugas Tengah Semester mata kuliah Pemrograman Berbasis Plaform oleh Fakultas Ilmu Komputer Universitas Indonesia pada Tahun Ajaran 2022/2023 
 
-Pemrograman Berbasis Platform (CSGE602022) - diselenggarakan oleh Fakultas Ilmu Komputer Universitas Indonesia, Semester Ganjil 2022/2023
+#### Anggota Kelompok
+Proyek ini dibuat oleh kelompok C-11 yang beranggotakan:
+1. Ahmad Hanif Adisetya (2106750603)
+2. Emir Shamsuddin Fadhlurrahman (2106632541)
+3. Kevin Alexander (2106705026)
+4. Muhammad Nabiel Andityo Purnomo (2106750465)
+5. Vania Azria Wardani (2106650380)
 
-*Read this in other languages: [Indonesian](README.md), [English](README.en.md)*
+#### Link Aplikasi Heroku
+https://buzzar-id.herokuapp.com/
 
-## Pendahuluan
+#### Overview
+Forum G20 merupakan forum kerja sama multilateral yang terdiri dari 19 negara utama dan Uni Eropa. G20 dibentuk pada 1999 atas inisiasi anggota G7. Forum G20 merangkul negara maju dan berkembang untuk bersama-sama mengatasi krisis dan bertujuan mewujudkan pertumbuhan global yang kuat, berkelanjutan, seimbang, dan inklusif. Pada tahun 2022, Indonesia memegang presidensi G20. Tema Presidensi G20 Indonesia 2022 yang diusung adalah *Recover Together, Recover Stronger*. Dengan tema tersebut, Indonesia mengajak seluruh dunia untuk saling mendukung pulih bersama serta tumbuh lebih kuat dan berkelanjutan. 
+<br><br>
+Salah satu isu utama yang diusung pada G20 tahun ini adalah **Transformasi Digital**. Menerapkan digitalisasi terhadap tatanan ekonomi dapat memulihkannya serta menjadi lebih kuat, inklusif dan kolaboratif. Salah satu kunci dalam pemulihan tatanan ekonomi adalah dengan pemberdayaan UMKM untuk mengakselerasikannya. Kelompok kami mencoba untuk memperdayakan hal tersebut, maka kami usung web aplikasi yang bernama **buzzar**.
+<br><br>
+Fitur utamanya tentu saja adalah adanya kumpulan UMKM yang telah memiliki cabang digital di tempat lain dan tidak menutup kemungkinan juga UMKM yang belum memiliki cabang digital dapat bergabung.
+<br><br>
+Selain itu terdapat juga fitur news untuk menampilkan berbagai informasi menarik yang dapat diisi oleh UMKM, seperti promosi, informasi, dan hal-hal lainnya.
+<br><br>
 
-Repositori ini merupakan sebuah template yang dirancang untuk membantu mahasiswa yang sedang mengambil mata kuliah Pemrograman Berbasis Platform (CSGE602022) mengetahui struktur sebuah proyek aplikasi Django serta file dan konfigurasi yang penting dalam berjalannya aplikasi. Kamu dapat dengan bebas menyalin isi dari repositori ini atau memanfaatkan repositori ini sebagai pembelajaran sekaligus awalan dalam membuat sebuah proyek Django.
+<br><br>
+Fitur lainnya yang tidak kalah penting adalah Obrolan UMKM. Pada fitur ini, pengguna dapat berbincang dengan pemilik UMKM, hal yang biasanya sulit dilakukan karena biasanya pemilik UMKM tidak menyediakan layanan secara daring.
+<br><br>
+Dengan adanya situs web ini, kami ingin masyarakat umum dapat lebih mudah dalam pencarian UMKM beserta informasi-informasinya sehingga UMKM-UMKM tersebut dapat berkembang dengan lebih baik.
 
-## Cara Menggunakan
+#### Daftar Modul
+Berikut adalah daftar modul yang akan kami implementasikan.
+1. News: Menampilkan informasi dari berbagai UMKM dan Admin (Maintenance, lomba, dsb.). Pengguna dapat melakukan _filter_ berdasarkan UMKM, kategori, dsb. Pengguna juga dapat melakukan _subscribe_ pada beberapa UMKM dan dapat melakukan _filter_ pada news sedemikian sehingga hanya UMKM yang di-_subscribe_-lah yang dapat dilihat.
 
-Apabila kamu ingin menggunakan repositori ini sebagai repositori awalan yang nantinya akan kamu modifikasi:
+2. Showcase: Menampilkan daftar UMKM. Kita bisa melakukan _filter_ dan _sort_. Ketika UMKM diklik, data dari UMKM yang diklik akan ditampilkan. Data tersebut contohnya adalah nama, sebagian produk, dll.
 
-1. Buka laman GitHub repositori templat kode, lalu klik tombol "**Use this template**"
-   untuk membuat salinan repositori ke dalam akun GitHub milikmu.
-2. Buka laman GitHub repositori yang dibuat dari templat, lalu gunakan perintah
-   `git clone` untuk menyalin repositorinya ke suatu lokasi di dalam sistem
-   berkas (_filesystem_) komputermu:
+3. Products: Menampilkan produck-produk. Bisa di-_filter_ untuk seluruh UMKM atau UMKM spesifik. Redirect ke shoppee, tokopedia, etc. (multi-toko)
 
-   ```shell
-   git clone <URL ke repositori di GitHub> <path ke suatu lokasi di filesystem>
-   ```
-3. Masuk ke dalam repositori yang sudah di-_clone_ dan jalankan perintah berikut
-   untuk menyalakan _virtual environment_:
+4. Lomba -> Tiap bulan ada program dimana tiap umkm bisa berlomba2 jadi yang terbaik -> Hadiah Modal usaha, showcase top umkm per bulan
 
-   ```shell
-   python -m venv env
-   ```
-4. Nyalakan environment dengan perintah berikut:
+5. Obrolan UMKM -> Pengguna bisa ngobrol2 dengan pemilik UMKM
 
-   ```shell
-   # Windows
-   .\env\Scripts\activate
-   # Linux/Unix, e.g. Ubuntu, MacOS
-   source env/bin/activate
-   ```
-5. Install dependencies yang dibutuhkan untuk menjalankan aplikasi dengan perintah berikut:
+#### Peran Pengguna
+Pengguna yang login dibagi menjadi 2, pemilik UMKM dan pengguna/customer.
 
-   ```shell
-   pip install -r requirements.txt
-   ```
+- UMKM
+Memiliki semua basic features dengan tambahan:
+1) Menambahkan UMKM pada saat registrasi (Untuk showcase & lomba)
+2) Menambahkan produk yang dia miliki (Untuk products & lomba)
+3) Bisa melihat lomba & menambahkan, namun tidak bisa vote
+4) Bisa menambah obrolan pada obrolan UMKM
+<br>
 
-6. Jalankan aplikasi Django menggunakan server pengembangan yang berjalan secara
-   lokal:
+- Pengguna/customer
+Memiliki semua basic features dengan tambahan:
+1) Bisa akses dan melakukan vote di bagian lomba
+2) Bisa menambah obrolan pada obrolan UMKM
+<br>
 
-   ```shell
-   python manage.py runserver
-   ```
-7. Bukalah `http://localhost:8000` pada browser favoritmu untuk melihat apakah aplikasi sudah berjalan dengan benar.
-
-## Contoh Deployment 
-
-Pada template ini, deployment dilakukan dengan memanfaatkan GitHub Actions sebagai _runner_ dan Heroku sebagai platform Hosting aplikasi. 
-
-Untuk melakukan deployment, kamu dapat melihat instruksi yang ada pada [Tutorial 0](https://pbp-fasilkom-ui.github.io/ganjil-2023/assignments/tutorial/tutorial-0).
-
-Untuk contoh aplikasi Django yang sudah di deploy, dapat kamu akses di [https://django-pbp-template.herokuapp.com/](https://django-pbp-template.herokuapp.com/)
-
-## Credits
-
-Template ini dibuat berdasarkan [PBP Ganjil 2021](https://gitlab.com/PBP-2021/pbp-lab) yang ditulis oleh Tim Pengajar Pemrograman Berbasis Platform 2021 ([@prakashdivyy](https://gitlab.com/prakashdivyy)) dan [django-template-heroku](https://github.com/laymonage/django-template-heroku) yang ditulis oleh [@laymonage, et al.](https://github.com/laymonage). Template ini dirancang sedemikian rupa sehingga mahasiswa dapat menjadikan template ini sebagai awalan serta acuan dalam mengerjakan tugas maupun dalam berkarya.
+- Pengguna tidak login
+Hanya memiliki basic features:
+1) Bisa melihat news dengan tambahan 2 subseksi yaitu news utama dan news dari admin
+2) Melihat showcase
+3) Melihat products 
