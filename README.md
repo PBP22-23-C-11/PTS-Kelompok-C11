@@ -22,8 +22,6 @@ Fitur utamanya tentu saja adalah adanya kumpulan UMKM yang telah memiliki cabang
 <br><br>
 Selain itu terdapat juga fitur news untuk menampilkan berbagai informasi menarik yang dapat diisi oleh UMKM, seperti promosi, informasi, dan hal-hal lainnya.
 <br><br>
-
-<br><br>
 Fitur lainnya yang tidak kalah penting adalah Obrolan UMKM. Pada fitur ini, pengguna dapat berbincang dengan pemilik UMKM, hal yang biasanya sulit dilakukan karena biasanya pemilik UMKM tidak menyediakan layanan secara daring.
 <br><br>
 Dengan adanya situs web ini, kami ingin masyarakat umum dapat lebih mudah dalam pencarian UMKM beserta informasi-informasinya sehingga UMKM-UMKM tersebut dapat berkembang dengan lebih baik.
