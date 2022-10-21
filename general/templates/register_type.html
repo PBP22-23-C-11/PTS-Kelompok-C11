@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Register UMKM</title>
+<script>
+    function showMessageUMKM(message) {
+        $('#message-umkm').html(message);
+    }
+    
+    function showMessageCustomer(message) {
+        $('#message-customer').html(message);
+    }
+    
+    $(document).ready(function() {
+        $('#register-umkm').submit(function(event) {
+            event.preventDefault();
+            name = $('#name').val();
+            $.ajax({
+                method: 'POST',
+                url: "{% url 'register_umkm' %}",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    name: name,
+                },
+                success: function(data) {
+                    window.location = '/test/umkm-only/'
+                    // TODO: Go to step 2
+                },
+                error: function(error) {
+                    console.log(error);
+                    showMessage('Error');
+                },
+            });
+        });
+        
+        $('#register-customer').submit(function(event) {
+            event.preventDefault();
+            firstName = $('#first-name').val();
+            lastName = $('#last-name').val();
+            $.ajax({
+                method: 'POST',
+                url: "{% url 'register_customer' %}",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    'first-name': firstName,
+                    'last-name': lastName,
+                },
+                success: function(data) {
+                    window.location = '/test/customer-only/'
+                    // TODO: Go to step 2
+                },
+                error: function(error) {
+                    console.log(error);
+                    showMessage('Error');
+                },
+            });
+        });
+    });
+</script>
+{% endblock meta %}
+
+{% block content %}
+<h1>Register Step 2</h1>
+<span>{{ username }}</span>
+
+<h2>Customer</h2>
+<form id="register-customer">
+    <span>First Name:</span>
+    <input id="first-name" type="text" name="first-name" />
+    
+    <span>Last Name:</span>
+    <input id="last-name" type="text" name="last-name" />
+    
+    <input type="submit" value="Submit" />
+</form>
+<span id="message-customer"></span>
+
+<h2>UMKM</h2>
+<form id="register-umkm">
+    <span>Name:</span>
+    <input id="name" type="text" name="name" />
+    
+    <input type="submit" value="Submit" />
+</form>
+<span id="message-umkm"></span>
+{% endblock content %}

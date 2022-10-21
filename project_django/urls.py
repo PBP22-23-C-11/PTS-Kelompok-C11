@@ -15,13 +15,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from general.views import landing_page, login_user, logout_user, register_user, register_type, register_umkm, register_customer, example_customer_only_page, example_umkm_only_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('example_app.urls')),
+    path('', landing_page, name='landing_page'),
     path('showcase/', include('showcase.urls')),
     path('products/', include('products.urls')),
     path('obrolan/', include('obrolan.urls')),
     path('news/', include('news.urls')),
     path('lomba/', include('lomba.urls')),
+    path('login/', login_user, name='login_user'),
+    path('logout/', logout_user, name='logout_user'),
+    path('register/', register_user, name='register_user'),
+    path('register-type/', register_type, name='register_type'),
+    path('register-umkm/', register_umkm, name='register_umkm'),
+    path('register-customer/', register_customer, name='register_customer'),
+    path('test/umkm-only/', example_umkm_only_page, name='umkm-only'),
+    path('test/customer-only/', example_customer_only_page, name='customer-only'),
 ]
