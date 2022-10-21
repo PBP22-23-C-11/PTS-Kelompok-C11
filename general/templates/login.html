@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Login</title>
+<script>
+    function showMessage(message) {
+        $('#message').html(message);
+    }
+    
+    $(document).ready(function() {
+        $('#register-form').submit(function(event) {
+            event.preventDefault();
+            
+            username = $('#username').val();
+            password = $('#password').val();
+            
+            $.ajax({
+                method: 'POST',
+                url: "{% url 'login_user' %}",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    username: username,
+                    password: password,
+                },
+                success: function(data) {
+                    // TODO: Go to step 2
+                },
+                error: function(error) {
+                    console.log(error);
+                    showMessage('Error');
+                },
+            });
+        })
+    });
+</script>
+{% endblock meta %}
+
+{% block content %}
+<h1>Login</h1>
+<form id="register-form">
+    <span>Name:</span>
+    <input id="username" type="text" name="username" />
+    
+    <span>Password:</span>
+    <input id="password" type="password" name="password" />
+    
+    <input type="submit" value="Next" />
+</form>
+<!-- <span id="message"></span> -->
+<ul>
+    {% if messages %}
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    {% endif %}
+</ul>
+<span>Doesn't have an account? <a href="/register">register</a></span>
+{% endblock content %}

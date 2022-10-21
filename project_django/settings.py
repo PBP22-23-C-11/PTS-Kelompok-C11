@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'obrolan',
     'products',
     'showcase',
+    'general',
 ]
 
 MIDDLEWARE = [
