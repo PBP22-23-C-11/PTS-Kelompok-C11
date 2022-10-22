@@ -7,8 +7,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
+from general.constants import UserType
+
 from .models import UMKM, Customer
-from .utils import get_user_type, none_required, umkm_required, customer_required
+from .utils import admin_required, get_user_type, none_required, type_required, umkm_required, customer_required
 
 # General Pages
 def landing_page(request):
@@ -33,15 +35,12 @@ def login_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-
         user = authenticate(request, username=username, password=password)
-        
         if user is not None:
             login(request, user)
             return HttpResponseRedirect(reverse('landing_page'))
         else:
             messages.error('User not found')
-    
     return render(request, 'login.html')
 
 def logout_user(request):
@@ -52,16 +51,12 @@ def register_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
         user = User.objects.create_user(username=username, password=password)
         user.save()
-        
         login(request, user)
-        
         return JsonResponse({
             'message': 'Akun berhasil dibuat',
         })
-    
     return render(request, 'register_user.html')
 
 @login_required(login_url='/login')
@@ -77,12 +72,10 @@ def register_type(request):
 def register_umkm(request):
     if request.method == 'POST':
         name = request.POST.get('name')
-        
         UMKM.objects.create(user=request.user, name=name)
         return JsonResponse({
             'message': 'Data UMKM berhasil dimasukkan',
         })
-    
     return HttpResponse(status=404)
 
 @login_required(login_url='/login')
@@ -91,10 +84,8 @@ def register_customer(request):
     if request.method == 'POST':
         first_name = request.POST.get('first-name')
         last_name = request.POST.get('last-name')
-        
         Customer.objects.create(user=request.user, first_name=first_name, last_name=last_name)
         return JsonResponse({
             'message': 'Data Customer berhasil dimasukkan',
         })
-    
     return HttpResponse(status=404)
