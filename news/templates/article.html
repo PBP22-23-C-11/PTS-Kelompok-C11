@@ -5,7 +5,87 @@
 <script>
     let userId = parseInt(`{{user_id}}`);
     let articleId = parseInt(`{{article.id}}`);
+</script>
+{% if is_customer and not is_official %}
+<script>
+    function setSubscribeButton() {
+        $.ajax({
+            method: 'GET',
+            url: "{% url 'news:subscribe' article.author_user.id %}",
+            headers: {
+                'X-CSRFToken': '{{csrf_token}}',
+            },
+            success: function(data) {
+                if (data.subscribed) {
+                    $('#subscribe_button').text('Unsubscribe');
+                } else {
+                    $('#subscribe_button').text('Subscribe');
+                }
+            },
+            error: function(error) {
+                alert('Error on fetching subscription data.');
+            },
+        });
+    }
     
+    function subscribe() {
+        $.ajax({
+            method: 'PUT',
+            url: "{% url 'news:subscribe' article.author_user.id %}",
+            headers: {
+                'X-CSRFToken': '{{csrf_token}}',
+            },
+            success: function(data) {
+                setSubscribeButton();
+            },
+            error: function(error) {
+                alert('Error on updating subscription data.');
+            },
+        });
+    }
+</script>
+{% endif %}
+{% if is_customer %}
+<script>
+    function setLikeButton() {
+        $.ajax({
+            method: 'GET',
+            url: "{% url 'news:like' article.id %}",
+            headers: {
+                'X-CSRFToken': '{{csrf_token}}',
+            },
+            success: function(data) {
+                if (data.liked) {
+                    $('#like_button').text('Unlike');
+                } else {
+                    $('#like_button').text('Like');
+                }
+                $('#like_count').text(data.count);
+            },
+            error: function(error) {
+                alert('Error on fetching like data.');
+            },
+        });
+    }
+    
+    function like() {
+        $.ajax({
+            method: 'PUT',
+            url: "{% url 'news:like' article.id %}",
+            headers: {
+                'X-CSRFToken': '{{csrf_token}}',
+            },
+            success: function(data) {
+                setLikeButton();
+            },
+            error: function(error) {
+                alert('Error on updating like data.');
+            },
+        });
+    }
+</script>
+{% endif %}
+<script>
     function deleteArticle() {
         $.ajax({
             method: 'DELETE',
@@ -89,7 +169,8 @@
     }
     
     $(document).ready(function() {
-        console.log(`User Id: ${userId}`);
+        setLikeButton();
+        setSubscribeButton();
         getComments();
         $('#delete_button').click(function() {
             deleteArticle();
@@ -106,10 +187,10 @@
 <a href="/news/"><button type="button">Back</button></a>
 <h1 id="title">{{article.title}}</h1>
 <div>
-    <span>Author: {{author_name}} (Subscribe)</span>
+    <span>Author: {{author_name}} {% if is_customer and not is_official %}<button id="subscribe_button" type="button" onclick="subscribe()">Subscribe</button>{% endif %}</span>
     <span>Created At: {{article.created_at}}</span>
-    <span>Updated At: {{article.updated_at}}</span>
-    <span>Likes: 0</span>
+    <span>Likes: <span id="like_count">{{article_likes}}</span></span>
+    {% if is_customer %}<button id="like_button" type="button" onclick="like()">Like</button>{% endif %}
 </div>
 {% if is_author %}
     <button id="delete_button" type="button">Delete</button>

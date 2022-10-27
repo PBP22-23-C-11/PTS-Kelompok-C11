@@ -18,7 +18,7 @@ class SortBy:
             string = string[:len(string)-5]
         
         if string == 'date':
-            string = 'updated_at'
+            string = 'created_at'
         
         middle = 'article__'
         if string == 'likes':
