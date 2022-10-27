@@ -1,7 +1,76 @@
+<style>
+    body {
+        align-items: center;
+    }
+</style>
+<body>
 {% extends 'base.html' %}
 
+{% block meta %}
+<title>Showcase</title>
+{% endblock meta %}
+
 {% block content %}
-<h1>Hello World!</h1>
-<p>Fill me!</p>
+<h1>Buzzar Tendants!</h1>
+
+<dialog class="modal" id="modalAdd">
+    <h3>Add my UMKM</h3>
+    <p>Hey, let's set up your shop!</p>
+
+    <label class="col-form-label">Name:</label><br>
+    <input type="text" class="form-control" id="name">
+    <br>
+    
+    <label class="col-form-label">Description:</label><br>
+    <textarea class="form-control" id="desc"></textarea>
+    <br>
+
+    <label class="col-form-label">URL:</label><br>
+    <input type="url" class="form-control" id="umkmURL">
+    <br>
+
+    <label class="col-form-label">Number:</label><br>
+    <input type="tel" class="form-control" id="number" maxlength="13">
+    <br><br>
+
+    <button type="submit" class="btn btn-success" id="doneAdd">Submit</button>
+</dialog>
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-3 g-4" id="myCards">
+    </div>
+</div> 
+
+{% if not type %}
+<button class="btn btn-success" id="btnAdd">Add My UMKM</button>
+{% endif %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="js/jquery/jquery-3.1.0.js"></script>
+<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    const modalAdd = document.getElementById("modalAdd");
+    const btnAdd = document.getElementById("btnAdd");
+    const doneAdd = document.getElementById("doneAdd");
+
+    btnAdd.addEventListener('click', () => {
+        modalAdd.showModal();
+    }); 
+
+    doneAdd.addEventListener('click', () => {
+        const name = $("#name").val();
+        const desc = $("#desc").val();
+        const umkmURL = $("#umkmURL").val();
+        const number = $("#number").val();
+        const data = {name:name, description:desc, umkm_url:umkmURL, number:number, csrfmiddlewaretoken:"{{ csrf_token }}"}
+        $.ajax({url:"/showcase/add_ajax/", data:data, method:"POST"}).done(function(resp){
+            $("myCards").append(`
+            <p>hello</p>
+            `)
+        }) 
+        modalAdd.close();
+    }); 
+</script>
 
 {% endblock content %}
+</body>
