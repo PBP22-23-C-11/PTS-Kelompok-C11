@@ -1,5 +1,5 @@
 from django.urls import path
-from lomba.views import show_lomba, daftar_lomba, vote_lomba, buat_lomba, all_lomba, all_lomba_json, data_lomba
+from lomba.views import *
 
 app_name = 'lomba'
 
