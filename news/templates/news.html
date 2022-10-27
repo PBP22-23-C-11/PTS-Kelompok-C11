@@ -95,6 +95,7 @@
     }
     
     function refreshArticleList(data) {
+        console.log(data);
         let articleList = $('#article_list');
         articleList.empty();
         
@@ -103,7 +104,8 @@
                 <div>
                     <span>Title: ${escapeHTML(article.title)}</span>
                     <span>Author: ${escapeHTML(article.author.name)}</span>
-                    <span>Last Update: ${article.updated_at}</span>
+                    <span>Created At: ${escapeHTML(article.created_at)}</span>
+                    <span>Likes: ${article.likes}</span>
                     <a href="/news/${article.id}"><span>Open</span></a>
                 </div>
             `);

@@ -9,7 +9,6 @@ class Article(models.Model):
     title = models.CharField(max_length=255)
     body = models.TextField()
     created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
 
 class OfficialArticle(models.Model):
     article = models.OneToOneField(Article, on_delete=models.CASCADE)
