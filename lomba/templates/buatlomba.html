@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Pembuatan Lomba</title>
+{% endblock meta %}
+
+{% block content %}
+<h1>Buat Lomba</h1>
+<form id="form-buat-lomba" method="POST">
+    {% csrf_token %}
+    <span>Nama Lomba:</span>
+    <input id="name" type="text" name="name" />
+    
+    <span>Keterangan Lomba:</span>
+    <input id="keterangan" type="text" name="keterangan" />
+    
+    <input type="submit" value="Daftar" />
+</form>
+{% endblock content %}
