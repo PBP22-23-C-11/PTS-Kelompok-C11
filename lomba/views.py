@@ -1,5 +1,3 @@
-from difflib import context_diff
-from subprocess import DETACHED_PROCESS
 from django.shortcuts import render
 from django.http import HttpResponse
 from general.utils import *
