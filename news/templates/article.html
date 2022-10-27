@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Buzzar-id: {{article.title}}</title>
+<script>
+    let userId = parseInt(`{{user_id}}`);
+    let articleId = parseInt(`{{article.id}}`);
+    
+    function deleteArticle() {
+        $.ajax({
+            method: 'DELETE',
+            url: "{% url 'news:article_by_id' article.id %}",
+            headers: {
+                'X-CSRFToken': '{{csrf_token}}',
+            },
+            success: function(data) {
+                window.location = "{% url 'news:news_page_umkm' %}"
+            },
+            error: function(error) {
+                alert('Error on deleting article.');
+            },
+        });
+    }
+    
+    function getComments() {
+        $.ajax({
+            method: 'GET',
+            url: "{% url 'news:article_comments' article.id %}",
+            headers: {
+                'X-CSRFToken': '{{csrf_token}}',
+            },
+            success: function(data) {
+                commentList = $('#comment_list');
+                commentList.empty();
+                data.comments.forEach(function(comment) {
+                    deleteButton = '';
+                    if (userId === comment.user.id) {
+                        deleteButton = `<button type="button" onclick="deleteComment(${comment.id});">Delete</button>`
+                    }
+                    commentList.append(`
+                        <div>
+                            <span>User: ${comment.user.name}</span><br/>
+                            <span>${comment.body}</span>
+                            ${deleteButton}
+                        </div>
+                    `);
+                });
+            },
+            error: function(error) {
+                alert('Error on fetching comments from server.');
+            },
+        });
+    }
+    
+    function postComment() {
+        commentBody = $('#comment_body').val();
+        $.ajax({
+            method: 'POST',
+            url: "{% url 'news:article_comments' article.id %}",
+            headers: {
+                'X-CSRFToken': '{{csrf_token}}',
+            },
+            data: {
+                'body': commentBody,
+            },
+            success: function(data) {
+                getComments();
+            },
+            error: function(error) {
+                alert('Error on posting comment to server.');
+            },
+        });
+    }
+    
+    function deleteComment(commentId) {
+        $.ajax({
+            method: 'DELETE',
+            url: `/news/api/articles/${articleId}/comments/${commentId}/`,
+            headers: {
+                'X-CSRFToken': '{{csrf_token}}',
+            },
+            success: function(data) {
+                getComments();
+            },
+            error: function(error) {
+                alert('Error on deleting comment.');
+            },
+        });
+    }
+    
+    $(document).ready(function() {
+        console.log(`User Id: ${userId}`);
+        getComments();
+        $('#delete_button').click(function() {
+            deleteArticle();
+        });
+        $('#add_comment').submit(function(event) {
+            event.preventDefault();
+            postComment();
+        });
+    });
+</script>
+{% endblock meta %}
+
+{% block content %}
+<a href="/news/"><button type="button">Back</button></a>
+<h1 id="title">{{article.title}}</h1>
+<div>
+    <span>Author: {{author_name}} (Subscribe)</span>
+    <span>Created At: {{article.created_at}}</span>
+    <span>Updated At: {{article.updated_at}}</span>
+    <span>Likes: 0</span>
+</div>
+{% if is_author %}
+    <button id="delete_button" type="button">Delete</button>
+{% endif %}
+<p id="body">{{article.body}}</p>
+{% if is_logged_in %}
+    <span>Add Comment:</span>
+    <form id="add_comment">
+        {% csrf_token %}
+        {{comment_form.as_table}}
+        <input type="submit" value="Add">
+    </form>
+    <span>Comments:</span>
+    <div id="comment_list"></div>
+{% else %}
+    <span>You need to login in order to see and create comments. <a href="/login/">Login</a></span>
+{% endif %}
+{% endblock content %}
