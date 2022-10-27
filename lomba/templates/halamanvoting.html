@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Pembuatan Lomba</title>
+{% endblock meta %}
+
+{% block content %}
+Masih salah blom selesai
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Nama</th>
+        <th>Keterangan</th>
+    </tr>
+    {% for lomba in task %}
+    <tr>
+        <th>{{ lomba.id }}</th>
+        <th>{{ lomba.namaLomba }}</th>
+        <th>{{ lomba.keterangan }}</th>
+    </tr>
+    {% endfor %}
+</table>
+
+<form id="form-daftar-lomba" method="POST">
+    {% csrf_token %}
+        
+    <input type="submit" value="Oke" />
+</form>
+{% endblock content %}
