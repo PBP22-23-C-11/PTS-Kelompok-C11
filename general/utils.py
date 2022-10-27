@@ -76,3 +76,8 @@ def check_user_type(user):
         return UserType.Admin
     else:
         return None
+    
+def get_user_name(user):
+    if check_user_type(user) == UserType.UMKM:
+        return user.umkm.name
+    return user.first_name + " " + user.last_name

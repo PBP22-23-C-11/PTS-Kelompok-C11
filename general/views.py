@@ -89,3 +89,7 @@ def register_customer(request):
             'message': 'Data Customer berhasil dimasukkan',
         })
     return HttpResponse(status=404)
+
+@login_required
+def get_logged_in_user_id(request):
+    return JsonResponse({'id':request.user.id})

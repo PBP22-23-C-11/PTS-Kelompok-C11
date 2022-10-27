@@ -1,7 +1,169 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<h1>Hello World!</h1>
-<p>Fill me!</p>
+{% block meta %}
+<title>News</title>
+{% if category == "umkm" %}
+    <script>
+        function submitForm() {
+            $.ajax({
+                method: 'GET',
+                url: "{% url 'news:article' %}",
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}',
+                },
+                data: {
+                    title: title,
+                    sort_by: sortBy,
+                    category: 'umkm',
+                    umkm: umkm,
+                    umkm_type: umkmType,
+                },
+                success: function(data) {
+                    refreshArticleList(data);
+                },
+                error: function(error) {
+                    alert('Error on fetching articles from server.')
+                },
+            });
+        }
+    </script>
+{% elif category == "official" %}
+    <script>
+        function submitForm() {
+            $.ajax({
+                method: 'GET',
+                url: "{% url 'news:article' %}",
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}',
+                },
+                data: {
+                    title: title,
+                    sort_by: sortBy,
+                    category: 'official',
+                },
+                success: function(data) {
+                    refreshArticleList(data);
+                },
+                error: function(error) {
+                    alert('Error on fetching articles from server.')
+                },
+            });
+        }
+    </script>
+{% elif category == "subscribed" %}
+    <script>
+        function submitForm() {
+            $.ajax({
+                method: 'GET',
+                url: "{% url 'news:article' %}",
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}',
+                },
+                data: {
+                    title: title,
+                    sort_by: sortBy,
+                    category: 'subscribed',
+                },
+                success: function(data) {
+                    refreshArticleList(data);
+                },
+                error: function(error) {
+                    alert('Error on fetching articles from server.')
+                },
+            });
+        }
+    </script>
+{% endif %}
+<script>
+    let title;
+    let umkm;
+    let umkmType;
+    let sortByValue;
+    let sortByDirection;
+    let sortBy;
+    
+    function updateNonSortBy() {
+        title = $('#title').val();
+        umkm = $('#umkm').val();
+        umkmType = $('#umkm_type').val();
+    }
+    
+    function updateSortBy() {
+        sortByValue = $('input[name=sort_by_value]:checked').val();
+        sortByDirection = $('input[name=sort_by_direction]:checked').val();
+        sortBy = `${sortByValue}_${sortByDirection}`;
+    }
+    
+    function refreshArticleList(data) {
+        let articleList = $('#article_list');
+        articleList.empty();
+        
+        data.articles.forEach(function(article) {
+            articleList.append(`
+                <div>
+                    <span>Title: ${escapeHTML(article.title)}</span>
+                    <span>Author: ${escapeHTML(article.author.name)}</span>
+                    <span>Last Update: ${article.updated_at}</span>
+                    <a href="/news/${article.id}"><span>Open</span></a>
+                </div>
+            `);
+        });
+    }
+    
+    $(document).ready(function() {
+        updateNonSortBy();
+        updateSortBy();
+        submitForm();
+        
+        $('#search_form').submit(function(event) {
+            event.preventDefault();
+            updateNonSortBy();
+            updateSortBy();
+            submitForm();
+        });
+        
+        $('input[name=sort_by_value], input[name=sort_by_direction]').change(function() {
+            updateSortBy();
+            submitForm();
+        });
+    });
+</script>
+{% endblock meta %}
 
+{% block content %}
+<h1>News</h1>
+<div>
+    <a href="/news/"><button type="button" class="{{umkm_button_class}}">UMKM</button></a>
+    <a href="/news/official/"><button type="button" class="{{official_button_class}}"">Official</button></a>
+    {% if is_customer %}
+        <a href="/news/subscribed/"><button type="button" class="{{subscribed_button_class}}">Subscribed</button></a>
+    {% endif %}
+    {% if is_umkm or is_admin %}
+        <a href="/news/create"><button type="button">Create</button></a>
+    {% endif %}
+</div>
+<form id="search_form" action="/news/api/articles" method="GET">
+    <div>
+        <input id="title" type="text" name="title" placeholder="Search Articles">
+        {% if category == "umkm" %}
+        <input id="umkm" type="text" name="umkm" placeholder="UMKM">
+        <select id="umkm_type" name="umkm_type">
+            <option value="">Pick Attribute</option>
+            <option value="username">Username</option>
+            <option value="name">Name</option>
+        </select>
+        {% endif %}
+        <input type="submit" value="Search">
+    </div>
+    <div>
+        <label>Sort By:</label>
+        <input id="sort_by_value_date" type="radio" name="sort_by_value" value="date" checked="checked"><label for="sort_by_value_date">Date</label>
+        <input id="sort_by_value_likes" type="radio" name="sort_by_value" value="likes"><label for="sort_by_value_likes">Likes</label>
+        <input id="sort_by_direction_asc" type="radio" name="sort_by_direction" value="asc"><label for="sort_by_direction_asc">Ascending</label>
+        <input id="sort_by_direction_desc" type="radio" name="sort_by_direction" value="desc" checked="checked"><label for="sort_by_direction_desc">Descending</label>
+    </div>
+</form>
+<div id="article_list">
+    
+</div>
 {% endblock content %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Buzzar-id</title>
+<script>
+    let articleId;
+    let userId;
+    $(document).ready(function() {
+        articleId = $('#article_id').text();
+        $.ajax({
+            method: 'GET',
+            url: "{% url 'news:article_by_id' article_id %}",
+            headers: {
+                'X-CSRFToken': '{{csrf_token}}',
+            },
+            success: function(data) {
+                $('title').text(`Buzzar-id: ${escapeHTML(data.title)}`);
+                $('#author_value').text(data.author.name);
+                $('#created_at_value').text(data.created_at);
+                $('#updated_at_value').text(data.updated_at);
+                $('#title').text(data.title);
+                $('#body').text(data.body);
+            },
+            error: function(error) {
+                console.log(error);
+            },
+        });
+        $.ajax({
+            method: 'GET',
+            url: "{% url 'get_logged_in_user_id' %}",
+            headers: {
+                'X-CSRFToken': '{{csrf_token}}',
+            },
+            success: function(data) {
+                userId = data.id;
+                console.log(userId);
+            },
+            error: function(error) {
+                console.log(error);
+            },
+        });
+    });
+</script>
+{% endblock meta %}
+
+{% block content %}
+
+<h1 id="title"></h1>
+<div>
+    <span>Author: <span id="author_value"></span> (Subscribe)</span>
+    <span>Created At: <span id="created_at_value"></span></span>
+    <span>Updated At: <span id="updated_at_value"></span></span>
+    <span>Likes: 0</span>
+</div>
+<div id="delete-div">
+    
+</div>
+<p id="body"></p>
+{% endblock content %}
