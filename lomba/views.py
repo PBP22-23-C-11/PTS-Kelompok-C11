@@ -68,18 +68,8 @@ def vote_lomba(request, id):
 
 # Ubah pakai ajax aja selesai
 def all_lomba(request):
-    # cuuser = request.user
-    # check = check_user_type(cuuser)
-    # allLomba = Lomba.objects.all()
-    # context = {
-    #     'user': cuuser,
-    #     'lombas': allLomba,
-    #     'check': check,
-    # }
-    # return render(request, 'halamandata.html', context)
     context = {}
     return render(request, 'halamandata.html', context)
-
 
 # return objeck lomba ke json selesai
 # sudah benar
