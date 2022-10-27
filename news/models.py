@@ -6,6 +6,7 @@ from general.models import UMKM, Customer
 # Create your models here.
 class Article(models.Model):
     author_user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    image = models.URLField(null=True)
     title = models.CharField(max_length=255)
     body = models.TextField()
     created_at = models.DateTimeField()

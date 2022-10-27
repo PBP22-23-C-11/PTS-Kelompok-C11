@@ -19,7 +19,7 @@ def news_page_umkm(request):
         'is_umkm': check_user_type(request.user) == UserType.UMKM,
         'is_admin': check_user_type(request.user) == UserType.Admin,
         'category': 'umkm',
-        'umkm_button_class': 'category-pressed',
+        'umkm_button_class': 'active',
     }
     return render(request, 'news.html', context)
 
@@ -29,7 +29,7 @@ def news_page_official(request):
         'is_umkm': check_user_type(request.user) == UserType.UMKM,
         'is_admin': check_user_type(request.user) == UserType.Admin,
         'category': 'official',
-        'official_button_class': 'category-pressed',
+        'official_button_class': 'active',
     }
     return render(request, 'news.html', context)
 
@@ -41,7 +41,7 @@ def news_page_subscribed(request):
         'is_umkm': check_user_type(request.user) == UserType.UMKM,
         'is_admin': check_user_type(request.user) == UserType.Admin,
         'category': 'subscribed',
-        'subscribed_button_class': 'category-pressed',
+        'subscribed_button_class': 'active',
     }
     return render(request, 'news.html', context)
 
@@ -129,6 +129,7 @@ def get_article(request):
             },
             'title': article.article.title,
             'body': article.article.body,
+            'image': article.article.image,
             'created_at': article.article.created_at,
             'likes': Like.objects.filter(article=article.article).count(),
         }
@@ -162,6 +163,7 @@ def post_article(request):
         },
         'title': article.title,
         'body': article.body,
+        'image': article.image,
         'created_at': article.created_at,
         'likes': Like.objects.filter(article=article).count(),
     }

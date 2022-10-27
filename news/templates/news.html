@@ -100,13 +100,23 @@
         articleList.empty();
         
         data.articles.forEach(function(article) {
+            let title = escapeHTML(article.title);
+            let authorName = escapeHTML(article.author.name);
+            let createdAt = article.created_at;
+            createdAt = new Date(createdAt).toDateString() + " " + new Date(createdAt).toTimeString().substring(0, 8);
+            let likes = article.likes;
+            let id = article.id;
+            let imageSource = article.image;
             articleList.append(`
-                <div>
-                    <span>Title: ${escapeHTML(article.title)}</span>
-                    <span>Author: ${escapeHTML(article.author.name)}</span>
-                    <span>Created At: ${escapeHTML(article.created_at)}</span>
-                    <span>Likes: ${article.likes}</span>
-                    <a href="/news/${article.id}"><span>Open</span></a>
+                <div class="card" style="width: 18rem">
+                    <img src=${imageSource} class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">${title}</h5>
+                        <span class="d-block">${authorName}</span>
+                        <span class="d-block">${createdAt}</span>
+                        <span class="d-block">Likes: ${likes}</span>
+                        <a href="/news/${id}" class="btn btn-primary">Read Article</a>
+                    </div>
                 </div>
             `);
         });
@@ -133,39 +143,72 @@
 {% endblock meta %}
 
 {% block content %}
-<h1>News</h1>
-<div>
-    <a href="/news/"><button type="button" class="{{umkm_button_class}}">UMKM</button></a>
-    <a href="/news/official/"><button type="button" class="{{official_button_class}}"">Official</button></a>
-    {% if is_customer %}
-        <a href="/news/subscribed/"><button type="button" class="{{subscribed_button_class}}">Subscribed</button></a>
-    {% endif %}
-    {% if is_umkm or is_admin %}
-        <a href="/news/create"><button type="button">Create</button></a>
-    {% endif %}
-</div>
-<form id="search_form" action="/news/api/articles" method="GET">
-    <div>
-        <input id="title" type="text" name="title" placeholder="Search Articles">
-        {% if category == "umkm" %}
-        <input id="umkm" type="text" name="umkm" placeholder="UMKM">
-        <select id="umkm_type" name="umkm_type">
-            <option value="">Pick Attribute</option>
-            <option value="username">Username</option>
-            <option value="name">Name</option>
-        </select>
+<div id="news-navigation" class="my-4">
+    <ul class="nav nav-pills justify-content-center gap-2">
+        <li class="nav-item">
+            <a class="nav-link {{umkm_button_class}}" href="/news/">UMKM</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{official_button_class}}" href="/news/official/">Official</a>
+        </li>
+        {% if is_customer %}
+            <li class="nav-item">
+                <a class="nav-link {{subscribed_button_class}}" href="/news/subscribed/">Link</a>
+            </li>
         {% endif %}
-        <input type="submit" value="Search">
+    </ul>
+</div>
+{% if is_umkm and category == "umkm" or is_admin and category == "official" %}
+<div class="d-flex justify-content-center">
+    <a href="/news/create"><button type="button" class="btn btn-primary">Create New Article</button></a>
+</div>
+{% endif %}
+<form id="search_form" class="mt-4" action="/news/api/articles" method="GET">
+    <div class="w-50 mx-auto">
+        <div class="input-group">
+            <input id="title" type="text" name="title" class="form-control" placeholder="Search Articles">
+            {% if category == "umkm" %}
+                <input id="umkm" type="text" name="umkm" class="form-control" placeholder="UMKM">
+                <select id="umkm_type" name="umkm_type" class="form-select">
+                    <option value="">Pick Attribute</option>
+                    <option value="username">Username</option>
+                    <option value="name">Name</option>
+                </select>
+            {% endif %}
+            <input type="submit" value="Search" class="btn btn-outline-secondary">
+        </div>
     </div>
-    <div>
-        <label>Sort By:</label>
-        <input id="sort_by_value_date" type="radio" name="sort_by_value" value="date" checked="checked"><label for="sort_by_value_date">Date</label>
-        <input id="sort_by_value_likes" type="radio" name="sort_by_value" value="likes"><label for="sort_by_value_likes">Likes</label>
-        <input id="sort_by_direction_asc" type="radio" name="sort_by_direction" value="asc"><label for="sort_by_direction_asc">Ascending</label>
-        <input id="sort_by_direction_desc" type="radio" name="sort_by_direction" value="desc" checked="checked"><label for="sort_by_direction_desc">Descending</label>
+    <div class="card w-75 mx-auto my-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <span class="mx-4">Sort By:</span>
+                    <div class="form-check form-check-inline">
+                        <input id="sort_by_value_date" class="form-check-input" type="radio" name="sort_by_value" value="date" checked="checked">
+                        <label for="sort_by_value_date" class="form-check-label">Date</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input id="sort_by_value_likes" class="form-check-input" type="radio" name="sort_by_value" value="likes">
+                        <label for="sort_by_value_likes" class="form-check-label">Likes</label>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input id="sort_by_direction_asc" class="form-check-input" type="radio" name="sort_by_direction" value="asc">
+                        <label for="sort_by_direction_asc" class="form-check-label">Ascending</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input id="sort_by_direction_desc" class="form-check-input" type="radio" name="sort_by_direction" value="desc" checked="checked">
+                        <label for="sort_by_direction_desc" class="form-check-label">Descending</label>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </form>
-<div id="article_list">
-    
+<div id="article_list" class="d-flex justify-content-center flex-wrap gap-4 mx-4 mb-4">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
 </div>
 {% endblock content %}
