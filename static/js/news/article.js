@@ -13,3 +13,7 @@ function getArticleId() {
 function getAuthorId() {
     return parseInt($('#value-author-id').text());
 }
+
+$(document).ready(function() {
+    $('#nav-item-news').addClass('active');
+});
