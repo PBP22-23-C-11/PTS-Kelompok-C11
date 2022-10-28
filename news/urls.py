@@ -7,7 +7,6 @@ urlpatterns = [
     path('', news_page_umkm, name='news_page_umkm'),
     path('official/', news_page_official, name='news_page_official'),
     path('subscribed/', news_page_subscribed, name='news_page_subscribed'),
-    path('create/', create_page, name='create_page'),
     path('api/article/', article, name='article'),
     path('<int:article_id>/', article_page, name='article_page'),
     path('api/articles/<int:article_id>/', article_by_id, name='article_by_id'),

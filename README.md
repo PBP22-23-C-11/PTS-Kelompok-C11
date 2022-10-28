@@ -61,3 +61,4 @@ Memiliki semua basic features dengan tambahan:
 - https://www.bi.go.id/id/g20/default.aspx
 - https://stackoverflow.com/questions/6234773/can-i-escape-html-special-chars-in-javascript
 - https://stackoverflow.com/questions/32942529/django-not-null-constraint-failed-userprofile-user-id-in-case-of-uploading-a-fil
+- https://stackoverflow.com/questions/49197269/django-bootstrap-input-group-addon-on-model-form-without-separating-fields

@@ -20,6 +20,7 @@ def news_page_umkm(request):
         'is_admin': check_user_type(request.user) == UserType.Admin,
         'category': 'umkm',
         'umkm_button_class': 'active',
+        'create_article_form': ArticleForm(),
     }
     return render(request, 'news.html', context)
 
@@ -30,6 +31,7 @@ def news_page_official(request):
         'is_admin': check_user_type(request.user) == UserType.Admin,
         'category': 'official',
         'official_button_class': 'active',
+        'create_article_form': ArticleForm(),
     }
     return render(request, 'news.html', context)
 
@@ -44,11 +46,6 @@ def news_page_subscribed(request):
         'subscribed_button_class': 'active',
     }
     return render(request, 'news.html', context)
-
-@login_required(login_url='/login/')
-@type_required(types=[UserType.Admin, UserType.UMKM])
-def create_page(request):
-    return render(request, 'create_article.html')
 
 def article_page(request, article_id):
     try:
@@ -144,36 +141,30 @@ def get_article(request):
 @get_user_type
 def post_article(request):
     user_type = check_user_type(request.user)
-    
-    title = request.POST.get('title')
-    body = request.POST.get('body')
-    created_at = timezone.now()
-    
-    article = Article.objects.create(
-        author_user=request.user,
-        title=title,
-        body=body,
-        created_at=created_at,
-    )
-    article_json = {
-        'id': article.id,
-        'author': {
-            'id': article.author_user.id,
-            'name': get_user_name(article.author_user),
-        },
-        'title': article.title,
-        'body': article.body,
-        'image': article.image,
-        'created_at': article.created_at,
-        'likes': Like.objects.filter(article=article).count(),
-    }
-    
-    if user_type == UserType.Admin:
-        OfficialArticle.objects.create(article=article)
-    else:
-        UMKMArticle.objects.create(author_umkm=request.umkm_data, article=article)
-    
-    return JsonResponse(article_json)
+    form = ArticleForm(request.POST)
+    if form.is_valid():
+        article = form.save(commit=False)
+        article.author_user = request.user
+        article.created_at = timezone.now()
+        article.save()
+        article_json = {
+            'id': article.id,
+            'author': {
+                'id': article.author_user.id,
+                'name': get_user_name(article.author_user),
+            },
+            'title': article.title,
+            'body': article.body,
+            'image': article.image,
+            'created_at': article.created_at,
+            'likes': Like.objects.filter(article=article).count(),
+        }
+        if user_type == UserType.Admin:
+            OfficialArticle.objects.create(article=article)
+        else:
+            UMKMArticle.objects.create(author_umkm=request.umkm_data, article=article)
+        return JsonResponse(article_json)
+    return HttpResponse(status=400)
 
 @login_required
 def article_by_id(request, article_id): # PUT, and DELETE
@@ -204,7 +195,7 @@ def article_comments(request, article_id): # GET and POST
     return HttpResponse(status=404)
 
 def get_article_comments(request, article):
-    comment_list = Comment.objects.filter(article=article)
+    comment_list = Comment.objects.filter(article=article).order_by('-created_at')
     comment_list_json = []
     for comment in comment_list:
         comment_json = {
@@ -214,6 +205,7 @@ def get_article_comments(request, article):
             },
             'id': comment.id,
             'body': comment.body,
+            'created_at': comment.created_at,
         }
         comment_list_json.append(comment_json)
     return JsonResponse({
@@ -226,6 +218,7 @@ def post_article_comment(request, article):
         comment = form.save(commit=False)
         comment.article = article
         comment.user = request.user
+        comment.created_at = timezone.now()
         comment.save()
         return HttpResponse(status=201)
     return HttpResponse(status=400)
