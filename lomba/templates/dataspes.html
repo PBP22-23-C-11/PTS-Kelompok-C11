@@ -2,30 +2,182 @@
 
 {% block meta %}
 <title>Perlombaan</title>
+<script>
+
+    var cekUser = "{{ check }}";
+
+    function cannotVote() {
+        $('.btn-cus').each(function(k, v) {
+            $(this).prop('disabled', true);
+        });
+
+        $("#pesan").html("Terima Kasih telah memberikan suara Anda.");
+        $("#msg").show();
+    }
+
+    function updateData(data, idDetail) {
+        // console.log("masuk ini");
+        $(`#${idDetail}`).html("Jumlah Vote: " + data[0].fields.jumlahVote);
+    }
+    
+    function votingData(idDetail) {
+        // console.log(idDetail);
+
+        $.ajax({
+            method: 'POST',
+            url: "../../vote/" + idDetail,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {},
+            success: function(data) {
+                // console.log("masuk 1");
+
+                $.get( "/lomba/all/data/json/" + idDetail, function(data) {
+                    updateData(data, idDetail);
+                });
+
+                cannotVote();
+                // $(`#${msg}`).html("Terima Kasih telah memberikan suara Anda.");
+                // $(`#${idDetail}`).html("Jumlah Vote: 99");
+            },
+            error: function(error) {
+                // console.log("masuk2");
+            },
+        });
+        // console.log(text);
+    }
+
+    $(document).ready(function(){
+
+
+        // console.log(typeof cekUser);
+
+        if (cekUser == "0") {
+
+            // console.log("masuk ini");
+
+            var menujuDaftar = document.createElement('a');
+            menujuDaftar.classList.add('btn', 'btn-primary', 'btn-lg', 'px-4', 'gap-3');
+            menujuDaftar.appendChild(document.createTextNode("Daftar Sekarang"));
+            menujuDaftar.href = "../../daftar/" + "{{ id }}";
+
+            $("#main-umkm").append(menujuDaftar);
+
+        } else if (cekUser == "1") {
+            var x = "{{ sudahPilih }}";
+
+            if (x != "0") {
+                cannotVote();
+            }
+        }
+        // cannotVote();
+
+        // console.log("{{ detail }}");
+
+        // console.log("{{ sudahPilih }}");
+        // console.log("tes");
+    });
+</script>
+
+<style>
+@media (min-width: 992px) {
+  .rounded-lg-3 { border-radius: .3rem; }
+}
+
+.b-example-divider {
+    height: 3rem;
+    background-color: rgba(0, 0, 0, .1);
+    border: solid rgba(0, 0, 0, .15);
+    border-width: 1px 0;
+    box-shadow: inset 0 0.5em 1.5em rgb(0 0 0 / 10%), inset 0 0.125em 0.5em rgb(0 0 0 / 15%);
+}
+</style>
 {% endblock meta %}
 
 {% block content %}
 
+<div class="px-4 py-5 my-5 text-center" style="display: none;"  id="msg">
+    <p class="lead mb-4" id="pesan"></p>
+</div>
+
+<!-- UMKM -->
+{% if check == 0 %}
+<div style="margin-bottom: 15px;">
+
+    <div class="px-4 py-5 my-5 text-center">
+        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/5.2/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+        <h1 class="display-5 fw-bold">{{ lomba.namaLomba }}</h1>
+        <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">{{ lomba.keterangan }}</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center" id="main-umkm">
+        </div>
+    </div>
+</div>
+
+<div class="b-example-divider"></div>
+
 <div class="main" style="margin: 20px;">
+    <div class="px-4 py-5 my-5 text-center">
+        <h1 class="display-5 fw-bold">Peserta yang Telah Mengikuti Lomba</h1>
+    </div>
     <div class="row" id="main-lomba">
         {% for lomba in detail %}
             <div class="col-sm-6">
-                <div class="card text-center" style="margin-bottom: 15px;">
-                    <div class="card-header">
-                        Jumlah Vote: {{ lomba.jumlahVote }}
-                    </div>
+                <div class="card" style="margin-bottom: 15px;">
+                    <!-- <img src="{{ lomba.situsKarya }}" class="card-img-top" alt="..."> -->
+                    <img src="https://cdn.pixabay.com/index/2022/10/18/11-44-28-337_1440x550.jpg" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{ lomba.namaKarya }}</h5>
                         <p class="card-text">{{ lomba.detailKeterangan }}</p>
-                        <a href="#" class="btn btn-primary">Pilih Sekarang</a>
-                    </div>
-                    <div class="card-footer text-muted">
-                        {{ lomba.situsKarya }}
+                        <p class="card-text"><small class="text-muted">Jumlah Vote: {{ lomba.jumlahVote }}</small></p>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
 </div>
+
+<!-- customer -->
+{% elif check == 1 %}
+<div class="main" style="margin: 20px;">
+    <div class="row" id="main-lomba">
+        {% for lomba in detail %}
+            <div class="col-sm-6">
+                <div class="card" style="margin-bottom: 15px;">
+                    <!-- <img src="{{ lomba.situsKarya }}" class="card-img-top" alt="..."> -->
+                    <img src="https://cdn.pixabay.com/index/2022/10/18/11-44-28-337_1440x550.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ lomba.namaKarya }}</h5>
+                        <p class="card-text">{{ lomba.detailKeterangan }}</p>
+                        <p class="card-text"><small class="text-muted" id="{{ lomba.id }}">Jumlah Vote: {{ lomba.jumlahVote }}</small></p>
+                        <button onclick="votingData('{{ lomba.id }}')" class="btn btn-primary btn-cus" style="float: right;">Pilih Sekarang</button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- sisanya -->
+{% else %}
+<div class="main" style="margin: 20px;">
+    <div class="row" id="main-lomba">
+        {% for lomba in detail %}
+            <div class="col-sm-6">
+                <div class="card" style="margin-bottom: 15px;">
+                    <!-- <img src="{{ lomba.situsKarya }}" class="card-img-top" alt="..."> -->
+                    <img src="https://cdn.pixabay.com/index/2022/10/18/11-44-28-337_1440x550.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ lomba.namaKarya }}</h5>
+                        <p class="card-text">{{ lomba.detailKeterangan }}</p>
+                        <p class="card-text"><small class="text-muted">Jumlah Vote: {{ lomba.jumlahVote }}</small></p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
 
 {% endblock content %}
