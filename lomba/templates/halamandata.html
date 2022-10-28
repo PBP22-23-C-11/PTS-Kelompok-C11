@@ -35,7 +35,7 @@
                 body.classList.add('card-body');
 
                 var title = document.createElement('h5');
-                var text = document.createElement('p');
+                // var text = document.createElement('p');
                 var buttonDetail = document.createElement('button');
                 var links = document.createElement('a');
                 
@@ -44,15 +44,15 @@
                 buttonDetail.appendChild(links);
 
                 title.classList.add('card-title');
-                text.classList.add('card-text');
+                // text.classList.add('card-text');
                 buttonDetail.classList.add('btn', 'btn-primary');
                 links.classList.add('link-light', 'text-decoration-none');
 
                 title.innerHTML = val.fields.namaLomba;
-                text.innerHTML = val.fields.keterangan;
+                // text.innerHTML = val.fields.keterangan;
 
                 body.appendChild(title);
-                body.appendChild(text);
+                // body.appendChild(text);
                 body.appendChild(buttonDetail);
 
                 card_outer.appendChild(body);

@@ -1,4 +1,3 @@
-from email.policy import default
 from django.db import models
 from general.models import UMKM, Customer
 from django.contrib.auth.models import User
