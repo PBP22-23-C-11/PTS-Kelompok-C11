@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from general.views import landing_page, login_user, logout_user, register_user, register_type, register_umkm, register_customer, example_customer_only_page, example_umkm_only_page
+from general.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +31,7 @@ urlpatterns = [
     path('register-type/', register_type, name='register_type'),
     path('register-umkm/', register_umkm, name='register_umkm'),
     path('register-customer/', register_customer, name='register_customer'),
+    path('api/get-user-id/', get_logged_in_user_id, name='get_logged_in_user_id'),
     path('test/umkm-only/', example_umkm_only_page, name='umkm-only'),
     path('test/customer-only/', example_customer_only_page, name='customer-only'),
 ]
