@@ -7,14 +7,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from general.constants import UserType
+from .constants import *
 
 from .models import UMKM, Customer
-from .utils import admin_required, get_user_type, none_required, type_required, umkm_required, customer_required
+from .utils import *
 
 # General Pages
 def landing_page(request):
-    return HttpResponse('Welcome to landing page!')
+    return render(request, 'landing_page.html')
     
 # Examples
 @login_required(login_url='/login') # mengharuskan user untuk login
