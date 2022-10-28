@@ -95,7 +95,6 @@
     }
     
     function refreshArticleList(data) {
-        console.log(data);
         let articleList = $('#article_list');
         articleList.empty();
         
@@ -107,6 +106,10 @@
             let likes = article.likes;
             let id = article.id;
             let imageSource = article.image;
+            console.log(article);
+            if (imageSource == null) {
+                imageSource = 'https://upload.wikimedia.org/wikipedia/commons/3/39/C_Hello_World_Program.png'; // TODO: Change Placeholder
+            }
             articleList.append(`
                 <div class="card" style="width: 18rem">
                     <img src=${imageSource} class="card-img-top">
@@ -140,6 +143,52 @@
         });
     });
 </script>
+{% if is_umkm and category == "umkm" or is_admin and category == "official" %}
+<script>
+    function previewImage() {
+        imageURL = $('#create-article-image').val();
+        $('#create-article-image-preview').attr('src', imageURL);
+    }
+    $(document).ready(function() {
+        $('#create-article-image').blur(previewImage);
+        $('#create-article-submit').click(function() {
+            title = $('#create-article-title').val();
+            body = $('#create-article-body').val();
+            imageURL = $('#create-article-image').val();
+            
+            $.ajax({
+                method: 'POST',
+                url: "{% url 'news:article' %}",
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}',
+                },
+                data: {
+                    title: title,
+                    body: body,
+                    image: imageURL,
+                },
+                success: function(data) {
+                    window.location = `/news/${data.id}`;
+                },
+                error: function(error) {
+                    alert('Error on posting article to server.');
+                },
+            });
+        });
+    });
+</script>
+{% endif %}
+<style>
+    #create-modal textarea {
+        resize: none;
+    }
+    #create-modal label {
+        margin-bottom: 5px;
+    }
+    #create-modal input, #create-modal textarea {
+        margin-bottom: 10px;
+    }
+</style>
 {% endblock meta %}
 
 {% block content %}
@@ -160,10 +209,32 @@
 </div>
 {% if is_umkm and category == "umkm" or is_admin and category == "official" %}
 <div class="d-flex justify-content-center">
-    <a href="/news/create"><button type="button" class="btn btn-primary">Create New Article</button></a>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-modal">
+        Create New Article
+    </button>
+</div>
+<div class="modal fade" id="create-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Create New Article</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{create_article_form.as_div}}
+                    <img id="create-article-image-preview" class="w-100">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="create-article-submit" type="button" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 {% endif %}
-<form id="search_form" class="mt-4" action="/news/api/articles" method="GET">
+<form id="search_form" class="mt-4">
     <div class="w-50 mx-auto">
         <div class="input-group">
             <input id="title" type="text" name="title" class="form-control" placeholder="Search Articles">
