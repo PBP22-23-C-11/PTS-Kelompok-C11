@@ -56,10 +56,10 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['body']
-        exclude = ['user', 'article']
+        exclude = ['user', 'article', 'created_at']
     
     body = forms.CharField(
-        label='Body',
+        label='',
         required=True,
         max_length=255,
         error_messages = {

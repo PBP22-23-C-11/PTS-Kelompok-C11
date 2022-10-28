@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from general.models import UMKM, Customer
 
@@ -26,6 +27,7 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     article = models.ForeignKey(Article, default=None, on_delete=models.CASCADE)
     body = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now())
 
 class Subscribe(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer')

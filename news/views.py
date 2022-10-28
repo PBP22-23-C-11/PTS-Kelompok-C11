@@ -195,7 +195,7 @@ def article_comments(request, article_id): # GET and POST
     return HttpResponse(status=404)
 
 def get_article_comments(request, article):
-    comment_list = Comment.objects.filter(article=article)
+    comment_list = Comment.objects.filter(article=article).order_by('-created_at')
     comment_list_json = []
     for comment in comment_list:
         comment_json = {
@@ -205,6 +205,7 @@ def get_article_comments(request, article):
             },
             'id': comment.id,
             'body': comment.body,
+            'created_at': comment.created_at,
         }
         comment_list_json.append(comment_json)
     return JsonResponse({
@@ -217,6 +218,7 @@ def post_article_comment(request, article):
         comment = form.save(commit=False)
         comment.article = article
         comment.user = request.user
+        comment.created_at = timezone.now()
         comment.save()
         return HttpResponse(status=201)
     return HttpResponse(status=400)
