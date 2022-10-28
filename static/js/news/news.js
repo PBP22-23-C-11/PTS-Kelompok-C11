@@ -75,6 +75,8 @@ function refreshArticleList(data) {
 }
 
 $(document).ready(function() {
+    $('#nav-item-news').addClass('active');
+    
     updateNonSortBy();
     updateSortBy();
     submitForm();
