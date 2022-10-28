@@ -34,6 +34,9 @@ function submitForm() {
 
 function updateNonSortBy() {
     title = $('#title').val();
+    if (title == undefined) {
+        title = $('#title-umkm').val();
+    }
     umkm = $('#umkm').val();
     umkmType = $('#umkm_type').val();
 }
@@ -76,13 +79,11 @@ function refreshArticleList(data) {
 
 $(document).ready(function() {
     $('#nav-item-news').addClass('active');
-    
     updateNonSortBy();
     updateSortBy();
     submitForm();
     
-    $('#search_form').submit(function(event) {
-        event.preventDefault();
+    $('#search-button').click(function() {
         updateNonSortBy();
         updateSortBy();
         submitForm();
