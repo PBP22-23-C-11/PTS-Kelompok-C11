@@ -17,51 +17,35 @@
     }
 
     function updateData(data, idDetail) {
-        // console.log("masuk ini");
         $(`#${idDetail}`).html("Jumlah Vote: " + data[0].fields.jumlahVote);
     }
     
     function votingData(idDetail) {
-        // console.log(idDetail);
-
         $.ajax({
             method: 'POST',
-            url: "../../vote/" + idDetail,
+            url: "/lomba/vote/" + idDetail,
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}'
             },
             data: {},
             success: function(data) {
-                // console.log("masuk 1");
-
                 $.get( "/lomba/all/data/json/" + idDetail, function(data) {
                     updateData(data, idDetail);
                 });
-
                 cannotVote();
-                // $(`#${msg}`).html("Terima Kasih telah memberikan suara Anda.");
-                // $(`#${idDetail}`).html("Jumlah Vote: 99");
             },
             error: function(error) {
-                // console.log("masuk2");
             },
         });
-        // console.log(text);
     }
 
     $(document).ready(function(){
 
-
-        // console.log(typeof cekUser);
-
         if (cekUser == "0") {
-
-            // console.log("masuk ini");
-
             var menujuDaftar = document.createElement('a');
             menujuDaftar.classList.add('btn', 'btn-primary', 'btn-lg', 'px-4', 'gap-3');
             menujuDaftar.appendChild(document.createTextNode("Daftar Sekarang"));
-            menujuDaftar.href = "../../daftar/" + "{{ id }}";
+            menujuDaftar.href = "/lomba/daftar/" + "{{ id }}";
 
             $("#main-umkm").append(menujuDaftar);
 
@@ -73,23 +57,12 @@
             }
         }
 
-        console.log(jumlah);
         if (jumlah == "0") {
-            console.log("masuk1");
-
-            
             $("#peserta").html("Belum ada peserta terdaftar");
 
         } else {
-            console.log("masuk2");
             $("#peserta").html("Peserta yang Telah Mengikuti Lomba");
         }
-        // cannotVote();
-
-        // console.log("{{ detail }}");
-
-        // console.log("{{ sudahPilih }}");
-        // console.log("tes");
     });
 </script>
 
@@ -114,8 +87,8 @@
     <p class="lead mb-4" id="pesan"></p>
 </div>
 
-<!-- UMKM -->
 {% if check == 0 %}
+<!-- UMKM -->
 <div style="margin-bottom: 15px;">
 
     <div class="px-4 py-5 my-5 text-center">
@@ -151,8 +124,8 @@
     </div>
 </div>
 
-<!-- customer -->
 {% elif check == 1 %}
+<!-- customer -->
 <div class="main" style="margin: 20px;">
     <div class="px-4 py-5 my-5 text-center">
         <h1 id="peserta" class="display-5 fw-bold"></h1>
@@ -175,8 +148,8 @@
     </div>
 </div>
 
-<!-- sisanya -->
 {% else %}
+<!-- sisanya -->
 <div class="main" style="margin: 20px;">
     <div class="px-4 py-5 my-5 text-center">
         <h1 id="peserta" class="display-5 fw-bold"></h1>

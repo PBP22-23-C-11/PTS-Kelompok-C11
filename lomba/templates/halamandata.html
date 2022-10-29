@@ -7,7 +7,7 @@
 
     function displayLomba(data) {
         if (data.length == 0) {
-            // If task is empty
+            // If lomba is empty
             var pesan = document.createElement('p');
             pesan.innerHTML = 'Tidak ada lomba';
 
@@ -58,16 +58,13 @@
                 outerDiv.appendChild(card_outer);
 
                 $("#main-lomba").append(outerDiv);
-
-                // console.log(val.fields.namaLomba);
-                // console.log(check);
             });
         }
     }
 
     $(document).ready(function(){
 
-        // For displaying task data
+        // For displaying lomba data
         $.get( "{% url 'lomba:all_lomba_json' %}", function(data) {
             displayLomba(data); 
         });
