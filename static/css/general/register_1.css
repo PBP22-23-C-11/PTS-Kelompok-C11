@@ -1,0 +1,12 @@
+#card-container {
+    width: 500px;
+}
+.helptext, .errorlist {
+    font-size: 0.75rem;
+}
+.errorlist {
+    color: red;
+}
+#register-1-form > div {
+    margin-bottom: 20px;
+}
