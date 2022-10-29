@@ -5,7 +5,7 @@ from general.utils import *
 from lomba.models import DetailLomba, Lomba, Voting
 from django.core import serializers
 
-# Create your views here.
+# Halaman utama lomba
 def show_lomba(request):
     check = check_user_type(request.user)
     context = {
@@ -14,7 +14,7 @@ def show_lomba(request):
     }
     return render(request, "lomba.html", context)
 
-# Khusus admin selesai
+# Untuk membuat lomba baru (khusus admin)
 @login_required(login_url='/login')
 @admin_required
 def buat_lomba(request):
@@ -27,8 +27,8 @@ def buat_lomba(request):
 
     return render(request, 'buatlomba.html')
 
-# Khusus UMKM
-# id dari lomba yg ingin didaftarkan
+# Untuk mendaftar pada suatu lomba (khusus UMKM)
+# id berasal dari Lomba yang ingin didaftarkan
 @login_required(login_url='/login')
 @umkm_required
 def daftar_lomba(request, id):
@@ -50,8 +50,8 @@ def daftar_lomba(request, id):
     }
     return render(request, 'halamandaftar.html', context)
 
-# Khusus Customer
-# idnya dari detailLomba
+# Untuk memberikan suara pada peserta lomba (khusus Customer)
+# id berasal dari DetailLomba (id peserta lomba)
 @login_required(login_url='/login')
 @customer_required
 def vote_lomba(request, id):
@@ -67,23 +67,23 @@ def vote_lomba(request, id):
 
         return redirect('lomba:all_lomba')
 
-# Tampilkan lomba
+# Untuk menampilkan data semua lomba
 def all_lomba(request):
     return render(request, 'halamandata.html')
 
-# Return objek lomba menjadi json
+# Kembalikan objek lomba menjadi JSON
 def all_lomba_json(request):
     allLomba = Lomba.objects.all()
     return HttpResponse(serializers.serialize("json", allLomba), content_type="application/json")
 
-# Id pake detaillomba
-# hasilin json buat ubah nilainya doang
+# Ambil data peserta lomba (DetailLomba) melalui id-nya
+# ubah menjadi bentuk JSON
 def peserta_lomba_json(request, id):
     pesertaLomba = DetailLomba.objects.all().filter(id=id)
     return HttpResponse(serializers.serialize("json", pesertaLomba), content_type="application/json")
 
-# id berupa id Lomba
-# Tampilkan seluruh data peserta pada lomba
+# Tampilkan seluruh data peserta lomba
+# id berasal dari Lomba
 def data_lomba(request, id):
     lomba = Lomba.objects.get(id=id)
     detail = DetailLomba.objects.filter(lomba=lomba)
@@ -105,7 +105,3 @@ def data_lomba(request, id):
         'jumlahPeserta': jumlah,
     }
     return render(request, 'dataspes.html', context)
-
-# Hanya test
-def test(request):
-    return redirect('/lomba/')
