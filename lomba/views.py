@@ -6,6 +6,7 @@ from lomba.models import DetailLomba, Lomba, Voting
 from django.core import serializers
 
 # Halaman utama lomba
+# test
 def show_lomba(request):
     check = check_user_type(request.user)
     context = {
