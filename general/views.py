@@ -1,3 +1,5 @@
+import datetime
+
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -39,14 +41,18 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse('landing_page'))
+            response = HttpResponseRedirect(reverse('landing_page'))
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
         else:
             messages.error(request, 'User not found')
     return render(request, 'login.html')
 
 def logout_user(request):
     logout(request)
-    return HttpResponseRedirect(reverse('login_user'))
+    response = HttpResponseRedirect(reverse('landing_page'))
+    response.delete_cookie('last_login')
+    return response
 
 def register_user(request):
     form = UserCreationForm()
