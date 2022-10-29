@@ -75,8 +75,6 @@
     <p class="lead mb-4" id="pesan"></p>
 </div>
 
-{% if check == 0 %}
-<!-- UMKM -->
 <div style="margin-bottom: 15px;">
 
     <div class="px-4 py-5 my-5 text-center">
@@ -91,6 +89,8 @@
 
 <div class="b-example-divider"></div>
 
+{% if check == 0 %}
+<!-- UMKM -->
 <div class="main" style="margin: 20px;">
     <div class="px-4 py-5 my-5 text-center">
         <h1 id="peserta" class="display-5 fw-bold"></h1>
@@ -99,8 +99,7 @@
         {% for lomba in detail %}
             <div class="col-sm-6">
                 <div class="card" style="margin-bottom: 15px;">
-                    <!-- <img src="{{ lomba.situsKarya }}" class="card-img-top" alt="..."> -->
-                    <img src="https://cdn.pixabay.com/index/2022/10/18/11-44-28-337_1440x550.jpg" class="card-img-top" alt="...">
+                    <img src="{{ lomba.situsKarya }}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{ lomba.namaKarya }}</h5>
                         <p class="card-text">{{ lomba.detailKeterangan }}</p>
@@ -122,8 +121,7 @@
         {% for lomba in detail %}
             <div class="col-sm-6">
                 <div class="card" style="margin-bottom: 15px;">
-                    <!-- <img src="{{ lomba.situsKarya }}" class="card-img-top" alt="..."> -->
-                    <img src="https://cdn.pixabay.com/index/2022/10/18/11-44-28-337_1440x550.jpg" class="card-img-top" alt="...">
+                    <img src="{{ lomba.situsKarya }}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{ lomba.namaKarya }}</h5>
                         <p class="card-text">{{ lomba.detailKeterangan }}</p>
@@ -146,8 +144,7 @@
         {% for lomba in detail %}
             <div class="col-sm-6">
                 <div class="card" style="margin-bottom: 15px;">
-                    <!-- <img src="{{ lomba.situsKarya }}" class="card-img-top" alt="..."> -->
-                    <img src="https://cdn.pixabay.com/index/2022/10/18/11-44-28-337_1440x550.jpg" class="card-img-top" alt="...">
+                    <img src="{{ lomba.situsKarya }}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{ lomba.namaKarya }}</h5>
                         <p class="card-text">{{ lomba.detailKeterangan }}</p>
