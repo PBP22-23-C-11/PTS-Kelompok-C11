@@ -3,6 +3,7 @@
 
 {% block meta %}
 <title>Pendaftaran Lomba</title>
+<link rel="stylesheet" href="{% static 'css/lomba/form_template.css' %}">
 
 <script>
     function cannotReg() {
@@ -27,24 +28,6 @@
         }
     });
 </script>
-
-<style>
-.form-signin {
-  max-width: 500px;
-  padding: 15px;
-}
-
-.mainbody {
-  display: flex;
-  align-items: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
-}
-
-.mainbody {
-  height: 100%;
-}
-</style>
 {% endblock meta %}
 
 {% block content %}
