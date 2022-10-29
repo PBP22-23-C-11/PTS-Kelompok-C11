@@ -5,6 +5,7 @@
 <script>
 
     var cekUser = "{{ check }}";
+    var jumlah = "{{ jumlahPeserta }}";
 
     function cannotVote() {
         $('.btn-cus').each(function(k, v) {
@@ -71,6 +72,18 @@
                 cannotVote();
             }
         }
+
+        console.log(jumlah);
+        if (jumlah == "0") {
+            console.log("masuk1");
+
+            
+            $("#peserta").html("Belum ada peserta terdaftar");
+
+        } else {
+            console.log("masuk2");
+            $("#peserta").html("Peserta yang Telah Mengikuti Lomba");
+        }
         // cannotVote();
 
         // console.log("{{ detail }}");
@@ -119,7 +132,7 @@
 
 <div class="main" style="margin: 20px;">
     <div class="px-4 py-5 my-5 text-center">
-        <h1 class="display-5 fw-bold">Peserta yang Telah Mengikuti Lomba</h1>
+        <h1 id="peserta" class="display-5 fw-bold"></h1>
     </div>
     <div class="row" id="main-lomba">
         {% for lomba in detail %}
@@ -141,6 +154,9 @@
 <!-- customer -->
 {% elif check == 1 %}
 <div class="main" style="margin: 20px;">
+    <div class="px-4 py-5 my-5 text-center">
+        <h1 id="peserta" class="display-5 fw-bold"></h1>
+    </div>
     <div class="row" id="main-lomba">
         {% for lomba in detail %}
             <div class="col-sm-6">
@@ -162,6 +178,9 @@
 <!-- sisanya -->
 {% else %}
 <div class="main" style="margin: 20px;">
+    <div class="px-4 py-5 my-5 text-center">
+        <h1 id="peserta" class="display-5 fw-bold"></h1>
+    </div>
     <div class="row" id="main-lomba">
         {% for lomba in detail %}
             <div class="col-sm-6">

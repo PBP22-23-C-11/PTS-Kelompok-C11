@@ -10,9 +10,9 @@
             // If task is empty
             var pesan = document.createElement('p');
             pesan.innerHTML = 'Tidak ada lomba';
-            pesan.style.margin = "10px auto";
 
-            $(document.body).append(pesan);
+            $("#pesan").append(pesan);
+            $("#ganti").show();
 
         } else {
             $.each( data, function(key, val) {
@@ -23,19 +23,11 @@
                 card_outer.classList.add('card', 'text-center');
                 card_outer.style.marginBottom = "15px";
 
-                // nanti diubah
-                var header = document.createElement('div');
-                header.classList.add('card-header');
-                header.innerHTML = "ID: " + val.pk;
-
-                // Nambahin header ke outer
-                card_outer.appendChild(header);
-
                 var body = document.createElement('div');
                 body.classList.add('card-body');
 
                 var title = document.createElement('h5');
-                // var text = document.createElement('p');
+                var text = document.createElement('p');
                 var buttonDetail = document.createElement('button');
                 var links = document.createElement('a');
                 
@@ -44,15 +36,15 @@
                 buttonDetail.appendChild(links);
 
                 title.classList.add('card-title');
-                // text.classList.add('card-text');
+                text.classList.add('card-text');
                 buttonDetail.classList.add('btn', 'btn-primary');
                 links.classList.add('link-light', 'text-decoration-none');
 
                 title.innerHTML = val.fields.namaLomba;
-                // text.innerHTML = val.fields.keterangan;
+                text.innerHTML = val.fields.keterangan;
 
                 body.appendChild(title);
-                // body.appendChild(text);
+                body.appendChild(text);
                 body.appendChild(buttonDetail);
 
                 card_outer.appendChild(body);
@@ -79,6 +71,7 @@
         $.get( "{% url 'lomba:all_lomba_json' %}", function(data) {
             displayLomba(data); 
         });
+
     });
 
 </script>
@@ -87,5 +80,8 @@
 {% block content %}
 <div class="main" style="margin: 20px;">
     <div class="row" id="main-lomba"></div>
+</div>
+<div id="ganti" class="px-4 py-5 my-5 text-center" style="display: none;">
+    <h1 id="pesan" class="display-5 fw-bold"></h1>
 </div>
 {% endblock content %}

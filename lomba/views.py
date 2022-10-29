@@ -15,7 +15,6 @@ def show_lomba(request):
     return render(request, "lomba.html", context)
 
 # Khusus admin selesai
-# Tinggal perbaiki template
 @login_required(login_url='/login')
 @admin_required
 def buat_lomba(request):
@@ -67,8 +66,6 @@ def vote_lomba(request, id):
         pemilih.save()
 
         return redirect('lomba:all_lomba')
-    
-    # return render(request, 'halamanvoting.html')
 
 # Tampilkan lomba
 def all_lomba(request):
@@ -90,6 +87,7 @@ def peserta_lomba_json(request, id):
 def data_lomba(request, id):
     lomba = Lomba.objects.get(id=id)
     detail = DetailLomba.objects.filter(lomba=lomba)
+    jumlah = len(detail)
     diPilih = 0
     check = 99
 
@@ -104,6 +102,7 @@ def data_lomba(request, id):
         'id': id,
         'sudahPilih': diPilih,
         'lomba': lomba,
+        'jumlahPeserta': jumlah,
     }
     return render(request, 'dataspes.html', context)
 
