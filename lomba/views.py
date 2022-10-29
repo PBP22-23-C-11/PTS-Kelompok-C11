@@ -11,10 +11,11 @@ from lomba.forms import LombaForm
 # Halaman utama lomba
 def show_lomba(request):
     check = check_user_type(request.user)
-    login = 0
+    login = "No data"
 
     if request.user.is_authenticated:
-        login = request.COOKIES['last_login']
+        if request.COOKIES.get('last_login', 'default') != 'default':
+            login = request.COOKIES['last_login']
 
     context = {
         'user': request.user,

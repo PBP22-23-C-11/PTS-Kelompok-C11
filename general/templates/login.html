@@ -7,35 +7,38 @@
 {% endblock meta %}
 
 {% block content %}
-<div id="center-flex" class="d-flex justify-content-center align-items-center">
-    <div id="card-container" class="card">
-        <div class="card-body">
-            <h3 class="card-title text-center">Login</h3>
-            <form id="login-form" action="" method="POST">
-                {% csrf_token %}
-                <div>
-                    <label class="d-block" for="username">Name:</label>
-                    <input id="username" type="text" name="username" class="form-control">
+
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-7 text-center text-lg-start">
+            <h1 class="display-4 fw-bold lh-1 mb-3">Buzzar-id</h1>
+            <p class="col-lg-10 fs-4">Login ke aplikasi</p>
+        </div>
+        <div class="col-md-10 mx-auto col-lg-5">
+            <form class="p-4 p-md-5 border rounded-3 bg-light" id="login-form">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="username" placeholder="Name">
+                    <label for="username">Name</label>
                 </div>
-                <div class="my-4">
-                    <label class="d-block" for="password">Password:</label>
-                    <input id="password" type="password" name="password" class="form-control">
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="password" placeholder="Password">
+                    <label for="password">Password</label>
                 </div>
-                <div class="d-flex justify-content-center">
-                    <input type="submit" value="Login" class="btn btn-primary">
-                </div>
-            </form>
-            {% if messages %}
+                <input type="submit" value="Login" class="w-100 btn btn-lg btn-primary">
+                {% if messages %}
                 <ul>
                     {% for message in messages %}
                         <li>{{ message }}</li>
                     {% endfor %}
                 </ul>
-            {% endif %}
-            <span class="d-block mt-4">Doesn't have an account? <a href="/register">Register</a></span>
+                {% endif %}
+                <hr class="my-4">
+                <small class="text-center">Tidak punya akun? <a href="/register">Daftar Sekarang</a></small>
+            </form>
         </div>
     </div>
 </div>
+
 <div class="d-none">
     <span id="value-csrf-token">{{ csrf_token }}</span>
 </div>
