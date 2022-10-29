@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
 from .constants import *
@@ -40,7 +41,7 @@ def login_user(request):
             login(request, user)
             return HttpResponseRedirect(reverse('landing_page'))
         else:
-            messages.error('User not found')
+            messages.error(request, 'User not found')
     return render(request, 'login.html')
 
 def logout_user(request):
@@ -48,16 +49,17 @@ def logout_user(request):
     return HttpResponseRedirect(reverse('login_user'))
 
 def register_user(request):
+    form = UserCreationForm()
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = User.objects.create_user(username=username, password=password)
-        user.save()
-        login(request, user)
-        return JsonResponse({
-            'message': 'Akun berhasil dibuat',
-        })
-    return render(request, 'register_user.html')
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return HttpResponseRedirect(reverse('register_type'))
+        else:
+            messages.error(request, 'Data is not valid')
+    context = { 'form': form }
+    return render(request, 'register_user.html', context)
 
 @login_required(login_url='/login')
 @none_required

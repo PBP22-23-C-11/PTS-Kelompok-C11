@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Register</title>
+<script>
+    function showMessage(message) {
+        $('#message').html(message);
+    }
+    
+    $(document).ready(function() {
+        $('#register-form').submit(function(event) {
+            event.preventDefault();
+            
+            username = $('#username').val();
+            password = $('#password').val();
+            passwordVerify = $('#password-verify').val();
+            
+            if (password != passwordVerify) {
+                showMessage('Password tidak sesuai');
+                return;
+            }
+            
+            $.ajax({
+                method: 'POST',
+                url: "{% url 'register_user' %}",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    username: username,
+                    password: password,
+                },
+                success: function(data) {
+                    window.location = '/register-type/'
+                },
+                error: function(error) {
+                    console.log(error);
+                    showMessage('Error');
+                },
+            });
+        })
+    });
+</script>
+{% endblock meta %}
+
+{% block content %}
+<h1>Register Step 1</h1>
+<form id="register-form">
+    <span>Username:</span>
+    <input id="username" type="text" name="username" />
+    
+    <span>Password:</span>
+    <input id="password" type="password" name="password" />
+    
+    <span>Re-type Password:</span>
+    <input id="password-verify" type="password" name="password-verify" />
+    
+    <input type="submit" value="Next" />
+</form>
+<span id="message"></span>
+<span>Already have an account? <a href="/login">login</a></span>
+{% endblock content %}

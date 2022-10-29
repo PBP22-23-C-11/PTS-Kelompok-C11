@@ -167,7 +167,7 @@ def post_article(request):
     return HttpResponse(status=400)
 
 @login_required
-def article_by_id(request, article_id): # PUT, and DELETE
+def article_by_id(request, article_id): # DELETE
     try:
         article = Article.objects.get(id=article_id)
     except Article.DoesNotExist:
@@ -183,6 +183,7 @@ def delete_article_by_id(request, article : Article):
 
 # Comments (Accessible by logged in users only)
 @login_required
+@type_required(types=[UserType.Admin, UserType.UMKM, UserType.Customer])
 def article_comments(request, article_id): # GET and POST
     try:
         article = Article.objects.get(id=article_id)
