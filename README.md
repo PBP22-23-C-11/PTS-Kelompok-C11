@@ -1,3 +1,8 @@
+![Test](https://github.com/PBP22-23-C-11/PTS-Kelompok-C11/actions/workflows/test.yml/badge.svg)
+![Deployment](https://github.com/PBP22-23-C-11/PTS-Kelompok-C11/actions/workflows/dpl.yml/badge.svg)
+
+
+
 # buzzar-id 🐝
 Sebuah wadah bagi para pemilik UMKM dan pelanggan untuk berinteraksi dan mengenal karya wirausaha.<br> 
 Proyek ini dibuat untuk memenuhi Proyek Tengah Semester Mata Kuliah Pemrograman Berbasis Plaform oleh Fakultas Ilmu Komputer Universitas Indonesia pada Tahun Ajaran 2022/2023.
