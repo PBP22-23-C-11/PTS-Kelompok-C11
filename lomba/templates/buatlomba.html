@@ -3,18 +3,47 @@
 
 {% block meta %}
 <title>Pembuatan Lomba</title>
+
+<style>
+    .form-signin {
+      max-width: 500px;
+      padding: 15px;
+    }
+    
+    .mainbody {
+      display: flex;
+      align-items: center;
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
+    
+    .mainbody {
+      height: 100%;
+    }
+</style>
+
 {% endblock meta %}
 
 {% block content %}
-<h1>Buat Lomba</h1>
-<form id="form-buat-lomba" method="POST">
-    {% csrf_token %}
-    <span>Nama Lomba:</span>
-    <input id="name" type="text" name="name" />
+<div class="mainbody">
+    <main class="form-signin w-100 m-auto">
+        <h1 class="h3 mb-3 fw-normal">Buat Lomba Baru</h1>
+        <form id="form-daftar-lomba" method="POST">
+            {% csrf_token %}
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="name" name="name">
+                <label for="name">Nama Lomba</label>
+            </div>
     
-    <span>Keterangan Lomba:</span>
-    <input id="keterangan" type="text" name="keterangan" />
+            <div class="form-floating">
+                <textarea class="form-control" id="keterangan" name="keterangan"></textarea>
+                <label for="keterangan">Keterangan Lomba</label>
+            </div>
     
-    <input type="submit" value="Daftar" />
-</form>
+            <div style="margin: 0 auto; display:table;">
+                <input id="daftarbtn" class="btn btn-primary" type="submit" value="Buat" style="margin-top: 15px;"/>
+            </div>
+        </form>
+    </main>
+</div>
 {% endblock content %}
