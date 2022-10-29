@@ -18,14 +18,14 @@ function getComments() {
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <span class="d-block">${comment.user.name}</span>
+                                    <span class="d-block">${escapeHTML(comment.user.name)}</span>
                                     <span class="d-block">${new Date(comment.created_at).toDateString() + " " + new Date(comment.created_at).toTimeString().substring(0, 8)}</span>
                                 </div>
                                 <div>
                                     ${deleteButton}
                                 </div>
                             </div>
-                            <span>${comment.body}</span>
+                            <span>${escapeHTML(comment.body)}</span>
                         </div>
                     </div>
                 `);
