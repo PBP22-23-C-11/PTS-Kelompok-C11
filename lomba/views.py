@@ -1,17 +1,25 @@
+import datetime
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from general.utils import *
 from lomba.models import DetailLomba, Lomba, Voting
 from django.core import serializers
+from lomba.forms import LombaForm
 
 # Halaman utama lomba
-# test
 def show_lomba(request):
     check = check_user_type(request.user)
+    login = 0
+
+    if request.user.is_authenticated:
+        login = request.COOKIES['last_login']
+
     context = {
         'user': request.user,
         'check': check,
+        'last_login': login,
     }
     return render(request, "lomba.html", context)
 
@@ -19,14 +27,16 @@ def show_lomba(request):
 @login_required(login_url='/login')
 @admin_required
 def buat_lomba(request):
+    form = LombaForm()
+
     if request.method == 'POST':
-        lomba = Lomba()
-        lomba.namaLomba = request.POST.get('name')
-        lomba.keterangan = request.POST.get('keterangan')
-        lomba.save()
+        form = LombaForm(request.POST)
+        if form.is_valid():
+            form.save()
         return redirect('lomba:all_lomba')
 
-    return render(request, 'buatlomba.html')
+    context = { 'form': form }
+    return render(request, 'buatlomba.html', context)
 
 # Untuk mendaftar pada suatu lomba (khusus UMKM)
 # id berasal dari Lomba yang ingin didaftarkan
