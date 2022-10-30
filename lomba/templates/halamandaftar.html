@@ -16,15 +16,22 @@
     $(document).ready(function(){
         
         var cekDaf = "{{ cekDaftar }}";
+        var ongoing = "{{ cekOng }}";
 
-        if (cekDaf != "0") {
+        if (ongoing == "False") {
+            cannotReg();
+            
+            var pesan = document.createElement('div');
+            pesan.classList.add('text-center');
+            pesan.innerHTML = "<p>Maaf, perlombaan telah berakhir</p>";
+
+            $(document.body).append(pesan);
+        } else if (cekDaf != "0") {
             cannotReg();
             
             var pesan = document.createElement('div');
             pesan.classList.add('text-center');
             pesan.innerHTML = "<p>Maaf, Anda sudah pernah mendaftar lomba ini</p>";
-
-            $(document.body).append(pesan);
         }
     });
 </script>
