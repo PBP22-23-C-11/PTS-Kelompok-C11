@@ -81,7 +81,10 @@ def vote_lomba(request, id):
 
 # Untuk menampilkan data semua lomba
 def all_lomba(request):
-    return render(request, 'halamandata.html')
+    context = {
+        'check': check_user_type(request.user),
+    }
+    return render(request, 'halamandata.html', context)
 
 # Kembalikan objek lomba menjadi JSON
 def all_lomba_json(request):
@@ -117,3 +120,13 @@ def data_lomba(request, id):
         'jumlahPeserta': jumlah,
     }
     return render(request, 'dataspes.html', context)
+
+# Id berasal dari Lomba
+def update_lomba(request, id):
+    lomba = Lomba.objects.get(id=id)
+
+    if lomba.berjalan == True:
+        lomba.berjalan = False
+  
+    lomba.save()
+    return redirect('lomba:all_lomba')

@@ -12,4 +12,5 @@ urlpatterns = [
     path('buat/', buat_lomba, name='buat_lomba'),
     path('vote/<int:id>', vote_lomba, name='vote_lomba'),
     path('daftar/<int:id>', daftar_lomba, name='daftar_lomba'),
+    path('all/selesai/<int:id>', update_lomba, name='update_lomba'),
 ]
