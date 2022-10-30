@@ -6,16 +6,19 @@
 <link rel="stylesheet" href="{% static 'css/lomba/data_peserta.css' %}">
 
 <script>
-    var cekUser = "{{ check }}";
-    var jumlah = "{{ jumlahPeserta }}";
-
-    function cannotVote() {
+    function cannotVote(pilih, selesai) {
         $('.btn-cus').each(function(k, v) {
             $(this).prop('disabled', true);
         });
 
-        $("#pesan").html("Terima Kasih telah memberikan suara Anda.");
-        $("#msg").show();
+        if (selesai == "False") {
+            $("#pesan").html("Maaf, perlombaan telah berakhir.");
+            $("#msg").show();
+        } else if (x != "0") {
+            $("#pesan").html("Terima Kasih telah memberikan suara Anda.");
+            $("#msg").show();
+        }
+        
     }
 
     function updateData(data, idDetail) {
@@ -42,6 +45,9 @@
     }
 
     $(document).ready(function(){
+        var cekUser = "{{ check }}";
+        var jumlah = "{{ jumlahPeserta }}";
+        var cekOng = "{{ ongoing }}";
 
         if (cekUser == "0") {
             var menujuDaftar = document.createElement('a');
@@ -54,8 +60,8 @@
         } else if (cekUser == "1") {
             var x = "{{ sudahPilih }}";
 
-            if (x != "0") {
-                cannotVote();
+            if (x != "0" || cekOng == "False") {
+                cannotVote(x, cekOng);
             }
         }
 

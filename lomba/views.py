@@ -59,6 +59,7 @@ def daftar_lomba(request, id):
     context = {
         'lomba': lomba,
         'cekDaftar': cekPendaftaran,
+        'cekOng': lomba.berjalan,
     }
     return render(request, 'halamandaftar.html', context)
 
@@ -117,6 +118,7 @@ def data_lomba(request, id):
         'id': id,
         'sudahPilih': diPilih,
         'lomba': lomba,
+        'ongoing': lomba.berjalan,
         'jumlahPeserta': jumlah,
     }
     return render(request, 'dataspes.html', context)
