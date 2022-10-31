@@ -14,9 +14,11 @@
 <div class="container">
     <div>
         <b style="color:#955251; font-family:verdana;"><font size="6">Discussion Forum</font></b></br>
-        <button class="btn btn-primary me-3 navbar-btn" type="button" name="create-disc" id="modalButton" style="border-radius: 5px;">
-            Create Discussion
-        </button>
+        {% if tipe_user != "Admin" %}
+            <button class="btn btn-primary me-3 navbar-btn" type="button" name="create-disc" id="modalButton" style="border-radius: 5px;">
+                Create Discussion
+            </button>
+        {% endif %}
     </div>
     <div class="row justify-content-around" id="card-container"></div>
 </div>
