@@ -1,2 +1,2 @@
-release: sh -c 'python manage.py migrate && python manage.py collectstatic'
+release: python manage.py migrate
 web: gunicorn project_django.wsgi --log-file -
