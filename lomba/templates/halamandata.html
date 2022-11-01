@@ -3,84 +3,109 @@
 
 {% block meta %}
 <title>Semua Lomba</title>
-<script>
 
-    function displayLomba(data) {
+<script>
+    function updateLomba(idLomba) {
+        // Untuk update Lomba ke selesai
+        $.ajax({
+            url: "selesai/" + idLomba,
+            success: function() {
+                $(`#selesai-${idLomba}`).prop('disabled', true);
+            }    
+        });
+    }
+
+    function displayLomba(data, userType) {
         if (data.length == 0) {
-            // If task is empty
+
+            // If lomba is empty
             var pesan = document.createElement('p');
             pesan.innerHTML = 'Tidak ada lomba';
-            pesan.style.margin = "10px auto";
 
-            $(document.body).append(pesan);
+            $("#pesan").append(pesan);
+            $("#ganti").show();
 
         } else {
             $.each( data, function(key, val) {
-                var outerDiv = document.createElement('div');
-                outerDiv.classList.add('col-sm-6');
 
-                var card_outer = document.createElement('div');
-                card_outer.classList.add('card', 'text-center');
-                card_outer.style.marginBottom = "15px";
+                // Cek apakah lomba masih berlangsung atau
+                // yang sedang login adalah admin
+                if (val.fields.berjalan || userType == "2") {
+                    var outerDiv = document.createElement('div');
+                    outerDiv.classList.add('col-sm-6');
 
-                // nanti diubah
-                var header = document.createElement('div');
-                header.classList.add('card-header');
-                header.innerHTML = "ID: " + val.pk;
+                    var card_outer = document.createElement('div');
+                    card_outer.classList.add('card', 'text-center');
+                    card_outer.style.marginBottom = "15px";
 
-                // Nambahin header ke outer
-                card_outer.appendChild(header);
+                    var body = document.createElement('div');
+                    body.classList.add('card-body');
 
-                var body = document.createElement('div');
-                body.classList.add('card-body');
+                    var title = document.createElement('h5');
+                    var text = document.createElement('p');
+                    var buttonDetail = document.createElement('button');
+                    var links = document.createElement('a');
+                    
+                    links.appendChild(document.createTextNode("Detail"));
+                    links.href = "data/" + val.pk;
+                    buttonDetail.appendChild(links);
 
-                var title = document.createElement('h5');
-                var text = document.createElement('p');
-                var buttonDetail = document.createElement('button');
-                var links = document.createElement('a');
-                
-                links.appendChild(document.createTextNode("Detail"));
-                links.href = "data/" + val.pk;
-                buttonDetail.appendChild(links);
+                    title.classList.add('card-title');
+                    text.classList.add('card-text');
+                    buttonDetail.classList.add('btn', 'btn-primary');
+                    links.classList.add('link-light', 'text-decoration-none');
 
-                title.classList.add('card-title');
-                text.classList.add('card-text');
-                buttonDetail.classList.add('btn', 'btn-primary');
-                links.classList.add('link-light', 'text-decoration-none');
+                    title.innerHTML = val.fields.namaLomba;
+                    text.innerHTML = val.fields.keterangan;
 
-                title.innerHTML = val.fields.namaLomba;
-                text.innerHTML = val.fields.keterangan;
+                    body.appendChild(title);
+                    body.appendChild(text);
+                    body.appendChild(buttonDetail);
 
-                body.appendChild(title);
-                body.appendChild(text);
-                body.appendChild(buttonDetail);
+                    // Khusus admin
+                    if (userType == "2") {
+                        var buttonSelesai = document.createElement('button');
 
-                card_outer.appendChild(body);
+                        buttonSelesai.classList.add('btn', 'btn-danger');
+                        buttonSelesai.setAttribute('id', `selesai-${val.pk}`);
+                        buttonSelesai.style.marginLeft = "10px";
+                        buttonSelesai.innerHTML = "Selesai";
+                        buttonSelesai.setAttribute('onclick', `updateLomba(${val.pk})`);
 
-                var footer = document.createElement('div');
-                footer.classList.add('card-footer', 'text-muted');
-                footer.innerHTML = "Tanggal ditambahkan: " + val.fields.tanggal;
+                        // Jika sudah tidak berjalan lagi
+                        if (!(val.fields.berjalan)) {
+                            buttonSelesai.disabled = true;
+                        }
 
-                card_outer.appendChild(footer);
+                        body.appendChild(buttonSelesai);
+                    }
+                    
+                    card_outer.appendChild(body);
 
-                outerDiv.appendChild(card_outer);
+                    var footer = document.createElement('div');
+                    footer.classList.add('card-footer', 'text-muted');
+                    footer.innerHTML = "Tanggal ditambahkan: " + val.fields.tanggal;
 
-                $("#main-lomba").append(outerDiv);
+                    card_outer.appendChild(footer);
 
-                // console.log(val.fields.namaLomba);
-                // console.log(check);
+                    outerDiv.appendChild(card_outer);
+
+                    $("#main-lomba").append(outerDiv);
+                }
             });
         }
     }
 
     $(document).ready(function(){
 
-        // For displaying task data
-        $.get( "{% url 'lomba:all_lomba_json' %}", function(data) {
-            displayLomba(data); 
-        });
-    });
+        const type = $("#user-type").html();
 
+        // For displaying lomba data
+        $.get( "/lomba/all/data/json", function(data) {
+            displayLomba(data, type);
+        });
+
+    });
 </script>
 {% endblock meta %}
 
@@ -88,4 +113,9 @@
 <div class="main" style="margin: 20px;">
     <div class="row" id="main-lomba"></div>
 </div>
+<div id="ganti" class="px-4 py-5 my-5 text-center" style="display: none;">
+    <h1 id="pesan" class="display-5 fw-bold"></h1>
+</div>
+
+<div id="user-type" style="display: none;">{{ check }}</div>
 {% endblock content %}

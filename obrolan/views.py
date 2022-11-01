@@ -16,14 +16,17 @@ def show_obrolan(request):
     if (type==0):
         tipe_user = "UMKM"
         opposite = "Customer"
-    else:
+    elif (type==1):
         tipe_user = "Customer"
         opposite = "UMKM"
+    else:
+        tipe_user = "Admin"
+        opposite = "UMKM, Customer"
 
     users = User.objects.all()
     opposite_user = []
     for user in users:
-        if (type != check_user_type(user)):
+        if (type != check_user_type(user)) and (check_user_type(user) != 2):
             opposite_user.append(user.username)
 
     user_and_type = dict()
@@ -31,8 +34,10 @@ def show_obrolan(request):
         type = check_user_type(user)
         if (type==0):
             user_and_type[user.username] = "UMKM"
-        else:
+        elif (type==1):
             user_and_type[user.username] = "Customer"
+        else:
+            user_and_type[user.username] = "Admin"
 
     context = {
         'form': DiscussionForm(),

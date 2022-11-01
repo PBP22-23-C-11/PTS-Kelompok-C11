@@ -1,3 +1,8 @@
+![Test](https://github.com/PBP22-23-C-11/PTS-Kelompok-C11/actions/workflows/test.yml/badge.svg)
+![Deployment](https://github.com/PBP22-23-C-11/PTS-Kelompok-C11/actions/workflows/dpl.yml/badge.svg)
+
+
+
 # buzzar-id 🐝
 Sebuah wadah bagi para pemilik UMKM dan pelanggan untuk berinteraksi dan mengenal karya wirausaha.<br> 
 Proyek ini dibuat untuk memenuhi Proyek Tengah Semester Mata Kuliah Pemrograman Berbasis Plaform oleh Fakultas Ilmu Komputer Universitas Indonesia pada Tahun Ajaran 2022/2023.
@@ -59,5 +64,7 @@ Memiliki semua basic features dengan tambahan:
 
 ## Referensi 🌐
 - https://www.bi.go.id/id/g20/default.aspx
+- https://blog.healthchecks.io/2020/11/using-github-actions-to-run-django-tests/
 - https://stackoverflow.com/questions/6234773/can-i-escape-html-special-chars-in-javascript
 - https://stackoverflow.com/questions/32942529/django-not-null-constraint-failed-userprofile-user-id-in-case-of-uploading-a-fil
+- https://stackoverflow.com/questions/49197269/django-bootstrap-input-group-addon-on-model-form-without-separating-fields

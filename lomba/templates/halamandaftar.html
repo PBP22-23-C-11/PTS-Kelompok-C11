@@ -3,23 +3,38 @@
 
 {% block meta %}
 <title>Pendaftaran Lomba</title>
-<style>
-.form-signin {
-  max-width: 500px;
-  padding: 15px;
-}
+<link rel="stylesheet" href="{% static 'css/lomba/form_template.css' %}">
 
-.mainbody {
-  display: flex;
-  align-items: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
-}
+<script>
+    function cannotReg() {
+        $("#daftarbtn").prop('disabled', true);
+        $("#namatext").prop('disabled', true);
+        $("#situs").prop('disabled', true);
+        $("#ket").prop('disabled', true);
+    }
 
-.mainbody {
-  height: 100%;
-}
-</style>
+    $(document).ready(function(){
+        
+        var cekDaf = "{{ cekDaftar }}";
+        var ongoing = "{{ cekOng }}";
+
+        if (ongoing == "False") {
+            cannotReg();
+            
+            var pesan = document.createElement('div');
+            pesan.classList.add('text-center');
+            pesan.innerHTML = "<p>Maaf, perlombaan telah berakhir</p>";
+
+            $(document.body).append(pesan);
+        } else if (cekDaf != "0") {
+            cannotReg();
+            
+            var pesan = document.createElement('div');
+            pesan.classList.add('text-center');
+            pesan.innerHTML = "<p>Maaf, Anda sudah pernah mendaftar lomba ini</p>";
+        }
+    });
+</script>
 {% endblock meta %}
 
 {% block content %}
@@ -29,22 +44,22 @@
         <form id="form-daftar-lomba" method="POST">
             {% csrf_token %}
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="nama-karya" name="nama-karya">
+                <input id="namatext" type="text" class="form-control" id="nama-karya" name="nama-karya">
                 <label for="nama-karya">Nama Karya</label>
             </div>
     
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="situs-karya" name="situs-karya">
+                <input id="situs" type="text" class="form-control" id="situs-karya" name="situs-karya">
                 <label for="situs-karya">Situs Karya</label>
             </div>
     
             <div class="form-floating">
-                <textarea class="form-control" id="keterangan" name="keterangan"></textarea>
+                <textarea id="ket" class="form-control" id="keterangan" name="keterangan"></textarea>
                 <label for="keterangan">Keterangan</label>
             </div>
     
             <div style="margin: 0 auto; display:table;">
-                <input class="btn btn-primary" type="submit" value="Daftar" style="margin-top: 15px;"/>
+                <input id="daftarbtn" class="btn btn-primary" type="submit" value="Daftar" style="margin-top: 15px;"/>
             </div>
         </form>
     </main>

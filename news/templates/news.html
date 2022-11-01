@@ -1,145 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block meta %}
 <title>News</title>
-{% if category == "umkm" %}
-    <script>
-        function submitForm() {
-            $.ajax({
-                method: 'GET',
-                url: "{% url 'news:article' %}",
-                headers: {
-                    'X-CSRFToken': '{{csrf_token}}',
-                },
-                data: {
-                    title: title,
-                    sort_by: sortBy,
-                    category: 'umkm',
-                    umkm: umkm,
-                    umkm_type: umkmType,
-                },
-                success: function(data) {
-                    refreshArticleList(data);
-                },
-                error: function(error) {
-                    alert('Error on fetching articles from server.')
-                },
-            });
-        }
-    </script>
-{% elif category == "official" %}
-    <script>
-        function submitForm() {
-            $.ajax({
-                method: 'GET',
-                url: "{% url 'news:article' %}",
-                headers: {
-                    'X-CSRFToken': '{{csrf_token}}',
-                },
-                data: {
-                    title: title,
-                    sort_by: sortBy,
-                    category: 'official',
-                },
-                success: function(data) {
-                    refreshArticleList(data);
-                },
-                error: function(error) {
-                    alert('Error on fetching articles from server.')
-                },
-            });
-        }
-    </script>
-{% elif category == "subscribed" %}
-    <script>
-        function submitForm() {
-            $.ajax({
-                method: 'GET',
-                url: "{% url 'news:article' %}",
-                headers: {
-                    'X-CSRFToken': '{{csrf_token}}',
-                },
-                data: {
-                    title: title,
-                    sort_by: sortBy,
-                    category: 'subscribed',
-                },
-                success: function(data) {
-                    refreshArticleList(data);
-                },
-                error: function(error) {
-                    alert('Error on fetching articles from server.')
-                },
-            });
-        }
-    </script>
+<link rel="stylesheet" href="{% static 'css/news/news.css' %}">
+<script src="{% static 'js/news/news.js' %}"></script>
+{% if is_umkm and category == "umkm" or is_admin and category == "official" %}
+    <script src="{% static 'js/news/news-create.js' %}"></script>
 {% endif %}
-<script>
-    let title;
-    let umkm;
-    let umkmType;
-    let sortByValue;
-    let sortByDirection;
-    let sortBy;
-    
-    function updateNonSortBy() {
-        title = $('#title').val();
-        umkm = $('#umkm').val();
-        umkmType = $('#umkm_type').val();
-    }
-    
-    function updateSortBy() {
-        sortByValue = $('input[name=sort_by_value]:checked').val();
-        sortByDirection = $('input[name=sort_by_direction]:checked').val();
-        sortBy = `${sortByValue}_${sortByDirection}`;
-    }
-    
-    function refreshArticleList(data) {
-        console.log(data);
-        let articleList = $('#article_list');
-        articleList.empty();
-        
-        data.articles.forEach(function(article) {
-            let title = escapeHTML(article.title);
-            let authorName = escapeHTML(article.author.name);
-            let createdAt = article.created_at;
-            createdAt = new Date(createdAt).toDateString() + " " + new Date(createdAt).toTimeString().substring(0, 8);
-            let likes = article.likes;
-            let id = article.id;
-            let imageSource = article.image;
-            articleList.append(`
-                <div class="card" style="width: 18rem">
-                    <img src=${imageSource} class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">${title}</h5>
-                        <span class="d-block">${authorName}</span>
-                        <span class="d-block">${createdAt}</span>
-                        <span class="d-block">Likes: ${likes}</span>
-                        <a href="/news/${id}" class="btn btn-primary">Read Article</a>
-                    </div>
-                </div>
-            `);
-        });
-    }
-    
-    $(document).ready(function() {
-        updateNonSortBy();
-        updateSortBy();
-        submitForm();
-        
-        $('#search_form').submit(function(event) {
-            event.preventDefault();
-            updateNonSortBy();
-            updateSortBy();
-            submitForm();
-        });
-        
-        $('input[name=sort_by_value], input[name=sort_by_direction]').change(function() {
-            updateSortBy();
-            submitForm();
-        });
-    });
-</script>
 {% endblock meta %}
 
 {% block content %}
@@ -160,13 +28,36 @@
 </div>
 {% if is_umkm and category == "umkm" or is_admin and category == "official" %}
 <div class="d-flex justify-content-center">
-    <a href="/news/create"><button type="button" class="btn btn-primary">Create New Article</button></a>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-modal">
+        Create New Article
+    </button>
+</div>
+<div class="modal fade" id="create-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Create New Article</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{create_article_form.as_div}}
+                    <img id="create-article-image-preview" class="w-100">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="create-article-submit" type="button" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 {% endif %}
-<form id="search_form" class="mt-4" action="/news/api/articles" method="GET">
-    <div class="w-50 mx-auto">
-        <div class="input-group">
-            <input id="title" type="text" name="title" class="form-control" placeholder="Search Articles">
+<form id="search_form" class="mt-4">
+    <div id="search-form-top" class="mx-auto">
+        
+        <div id="search-form-top-div" class="d-flex">
+            <input id="title{% if category == "umkm" %}-umkm{% endif %}" type="text" name="title" class="form-control" placeholder="Search Articles">
             {% if category == "umkm" %}
                 <input id="umkm" type="text" name="umkm" class="form-control" placeholder="UMKM">
                 <select id="umkm_type" name="umkm_type" class="form-select">
@@ -175,14 +66,15 @@
                     <option value="name">Name</option>
                 </select>
             {% endif %}
-            <input type="submit" value="Search" class="btn btn-outline-secondary">
+            <button id="search-button" type="button" class="btn btn-primary">Search</button>
         </div>
+        
     </div>
-    <div class="card w-75 mx-auto my-4">
+    <div id="search-form-bottom" class="card mx-auto my-4">
         <div class="card-body">
-            <div class="d-flex justify-content-between">
+            <div id="sort-by-flex" class="d-flex justify-content-between">
                 <div>
-                    <span class="mx-4">Sort By:</span>
+                    <span id="sort-by-flex-label" class="mx-4">Sort By:</span>
                     <div class="form-check form-check-inline">
                         <input id="sort_by_value_date" class="form-check-input" type="radio" name="sort_by_value" value="date" checked="checked">
                         <label for="sort_by_value_date" class="form-check-label">Date</label>
@@ -210,5 +102,9 @@
     <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading</span>
     </div>
+</div>
+<div class="d-none">
+    <span id="value-csrf-token">{{ csrf_token }}</span>
+    <span id="value-category">{{ category }}</span>
 </div>
 {% endblock content %}

@@ -1,0 +1,9 @@
+body {
+    height: calc(100vh - 70px);
+}
+#card-container {
+    width: 400px;
+}
+#center-flex {
+    height: 99%;
+}

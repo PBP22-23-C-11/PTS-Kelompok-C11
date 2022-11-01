@@ -1,34 +1,48 @@
+import datetime
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 from general.utils import *
 from lomba.models import DetailLomba, Lomba, Voting
 from django.core import serializers
+from lomba.forms import LombaForm
 
-# Create your views here.
+# Halaman utama lomba
 def show_lomba(request):
     check = check_user_type(request.user)
+    login = "No data"
+
+    if request.user.is_authenticated:
+        if request.COOKIES.get('last_login', 'default') != 'default':
+            login = request.COOKIES['last_login']
+
     context = {
         'user': request.user,
         'check': check,
+        'last_login': login,
     }
     return render(request, "lomba.html", context)
 
-# Khusus admin selesai
-# Tinggal perbaiki template
+# Untuk membuat lomba baru (khusus admin)
+@login_required(login_url='/login')
 @admin_required
 def buat_lomba(request):
+    form = LombaForm()
+
     if request.method == 'POST':
-        lomba = Lomba()
-        lomba.namaLomba = request.POST.get('name')
-        lomba.keterangan = request.POST.get('keterangan')
-        lomba.save()
-        return redirect('lomba:show_lomba')
+        form = LombaForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('lomba:all_lomba')
 
-    return render(request, 'buatlomba.html')
+    context = { 'form': form }
+    return render(request, 'buatlomba.html', context)
 
-# Khusus UMKM selesai
-# Tinggal perbaiki template
-# id dari lomba yg ingin didaftarkan
+# Untuk mendaftar pada suatu lomba (khusus UMKM)
+# id berasal dari Lomba yang ingin didaftarkan
+@login_required(login_url='/login')
+@umkm_required
 def daftar_lomba(request, id):
     if request.method == 'POST':
         daftarLomba = DetailLomba()
@@ -41,47 +55,80 @@ def daftar_lomba(request, id):
         return redirect('lomba:show_lomba')
     
     lomba = Lomba.objects.get(id=id)
+    cekPendaftaran = len(DetailLomba.objects.all().filter(lomba=lomba, peserta=request.user));
     context = {
         'lomba': lomba,
+        'cekDaftar': cekPendaftaran,
+        'cekOng': lomba.berjalan,
     }
     return render(request, 'halamandaftar.html', context)
 
-# Khusus Customer
-# Blom jadi
-# idnya dari lomba
-# Model salah dikit
+# Untuk memberikan suara pada peserta lomba (khusus Customer)
+# id berasal dari DetailLomba (id peserta lomba)
+@login_required(login_url='/login')
+@customer_required
 def vote_lomba(request, id):
     if request.method == 'POST':
+        dataLomba = DetailLomba.objects.get(id=id)
+        dataLomba.jumlahVote += 1
+        dataLomba.save()
+
         pemilih = Voting()
         pemilih.pemilih = request.user
-        pemilih.lomba = Lomba.objects.get(id=id)
+        pemilih.lomba = dataLomba.lomba
         pemilih.save()
 
-        lomba = DetailLomba.objects.get(lomba = pemilih.lomba)
-        lomba.jumlahVote += 1
-        lomba.save()
+        return redirect('lomba:all_lomba')
 
-        return redirect('lomba:vote_lomba')
-    return render(request, "halamanvoting.html")
-
-# Ubah pakai ajax aja selesai
+# Untuk menampilkan data semua lomba
 def all_lomba(request):
-    context = {}
+    context = {
+        'check': check_user_type(request.user),
+    }
     return render(request, 'halamandata.html', context)
 
-# return objeck lomba ke json selesai
-# sudah benar
+# Kembalikan objek lomba menjadi JSON
 def all_lomba_json(request):
     allLomba = Lomba.objects.all()
     return HttpResponse(serializers.serialize("json", allLomba), content_type="application/json")
 
-# id berupa id Lomba
+# Ambil data peserta lomba (DetailLomba) melalui id-nya
+# ubah menjadi bentuk JSON
+def peserta_lomba_json(request, id):
+    pesertaLomba = DetailLomba.objects.all().filter(id=id)
+    return HttpResponse(serializers.serialize("json", pesertaLomba), content_type="application/json")
+
+# Tampilkan seluruh data peserta lomba
+# id berasal dari Lomba
 def data_lomba(request, id):
     lomba = Lomba.objects.get(id=id)
     detail = DetailLomba.objects.filter(lomba=lomba)
-    check = check_user_type(request.user)
+    jumlah = len(detail)
+    diPilih = 0
+    check = 99
+
+    # Jika user sedang login
+    if request.user.is_authenticated:
+        diPilih = len(Voting.objects.filter(pemilih=request.user, lomba=lomba))
+        check = check_user_type(request.user)
+
     context = {
         'check': check,
         'detail': detail,
+        'id': id,
+        'sudahPilih': diPilih,
+        'lomba': lomba,
+        'ongoing': lomba.berjalan,
+        'jumlahPeserta': jumlah,
     }
-    return render(request, 'dataspes.html',context)
+    return render(request, 'dataspes.html', context)
+
+# Id berasal dari Lomba
+def update_lomba(request, id):
+    lomba = Lomba.objects.get(id=id)
+
+    if lomba.berjalan == True:
+        lomba.berjalan = False
+  
+    lomba.save()
+    return redirect('lomba:all_lomba')

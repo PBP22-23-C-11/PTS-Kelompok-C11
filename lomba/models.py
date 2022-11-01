@@ -1,4 +1,3 @@
-from email.policy import default
 from django.db import models
 from general.models import UMKM, Customer
 from django.contrib.auth.models import User
@@ -10,6 +9,7 @@ class Lomba(models.Model):
     namaLomba = models.TextField()
     keterangan = models.TextField()
     tanggal = models.DateField(auto_now=True)
+    berjalan = models.BooleanField(default=True)
 
 # Model untuk UMKM yang ikut lomba
 class DetailLomba(models.Model):

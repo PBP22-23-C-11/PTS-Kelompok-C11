@@ -1,31 +1,166 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block meta %}
 <title>Perlombaan</title>
+<link rel="stylesheet" href="{% static 'css/lomba/data_peserta.css' %}">
+
+<script>
+    function cannotVote(pilih, selesai) {
+        $('.btn-cus').each(function(k, v) {
+            $(this).prop('disabled', true);
+        });
+
+        if (selesai == "False") {
+            $("#pesan").html("Maaf, perlombaan telah berakhir.");
+            $("#msg").show();
+        } else if (x != "0") {
+            $("#pesan").html("Terima Kasih telah memberikan suara Anda.");
+            $("#msg").show();
+        }
+        
+    }
+
+    function updateData(data, idDetail) {
+        $(`#${idDetail}`).html("Jumlah Vote: " + data[0].fields.jumlahVote);
+    }
+    
+    function votingData(idDetail) {
+        $.ajax({
+            method: 'POST',
+            url: "/lomba/vote/" + idDetail,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {},
+            success: function(data) {
+                $.get( "/lomba/all/data/json/" + idDetail, function(data) {
+                    updateData(data, idDetail);
+                });
+                cannotVote();
+            },
+            error: function(error) {
+            },
+        });
+    }
+
+    $(document).ready(function(){
+        var cekUser = "{{ check }}";
+        var jumlah = "{{ jumlahPeserta }}";
+        var cekOng = "{{ ongoing }}";
+
+        if (cekUser == "0") {
+            var menujuDaftar = document.createElement('a');
+            menujuDaftar.classList.add('btn', 'btn-primary', 'btn-lg', 'px-4', 'gap-3');
+            menujuDaftar.appendChild(document.createTextNode("Daftar Sekarang"));
+            menujuDaftar.href = "/lomba/daftar/" + "{{ id }}";
+
+            $("#main-umkm").append(menujuDaftar);
+
+        } else if (cekUser == "1") {
+            var x = "{{ sudahPilih }}";
+
+            if (x != "0" || cekOng == "False") {
+                cannotVote(x, cekOng);
+            }
+        }
+
+        if (jumlah == "0") {
+            $("#peserta").html("Belum ada peserta terdaftar");
+
+        } else {
+            $("#peserta").html("Peserta yang Telah Mengikuti Lomba");
+        }
+    });
+</script>
 {% endblock meta %}
 
 {% block content %}
 
+<div class="px-4 py-5 my-5 text-center" style="display: none;"  id="msg">
+    <p class="lead mb-4" id="pesan"></p>
+</div>
+
+<div style="margin-bottom: 15px;">
+
+    <div class="px-4 py-5 my-5 text-center">
+        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/5.2/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+        <h1 class="display-5 fw-bold">{{ lomba.namaLomba }}</h1>
+        <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">{{ lomba.keterangan }}</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center" id="main-umkm">
+        </div>
+    </div>
+</div>
+
+<div class="b-example-divider"></div>
+
+{% if check == 0 %}
+<!-- UMKM -->
 <div class="main" style="margin: 20px;">
+    <div class="px-4 py-5 my-5 text-center">
+        <h1 id="peserta" class="display-5 fw-bold"></h1>
+    </div>
     <div class="row" id="main-lomba">
         {% for lomba in detail %}
             <div class="col-sm-6">
-                <div class="card text-center" style="margin-bottom: 15px;">
-                    <div class="card-header">
-                        Jumlah Vote: {{ lomba.jumlahVote }}
-                    </div>
+                <div class="card" style="margin-bottom: 15px;">
+                    <img src="{{ lomba.situsKarya }}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{ lomba.namaKarya }}</h5>
                         <p class="card-text">{{ lomba.detailKeterangan }}</p>
-                        <a href="#" class="btn btn-primary">Pilih Sekarang</a>
-                    </div>
-                    <div class="card-footer text-muted">
-                        {{ lomba.situsKarya }}
+                        <p class="card-text"><small class="text-muted">Jumlah Vote: {{ lomba.jumlahVote }}</small></p>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
 </div>
+
+{% elif check == 1 %}
+<!-- customer -->
+<div class="main" style="margin: 20px;">
+    <div class="px-4 py-5 my-5 text-center">
+        <h1 id="peserta" class="display-5 fw-bold"></h1>
+    </div>
+    <div class="row" id="main-lomba">
+        {% for lomba in detail %}
+            <div class="col-sm-6">
+                <div class="card" style="margin-bottom: 15px;">
+                    <img src="{{ lomba.situsKarya }}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ lomba.namaKarya }}</h5>
+                        <p class="card-text">{{ lomba.detailKeterangan }}</p>
+                        <p class="card-text"><small class="text-muted" id="{{ lomba.id }}">Jumlah Vote: {{ lomba.jumlahVote }}</small></p>
+                        <button onclick="votingData('{{ lomba.id }}')" class="btn btn-primary btn-cus" style="float: right;">Pilih Sekarang</button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% else %}
+<!-- sisanya -->
+<div class="main" style="margin: 20px;">
+    <div class="px-4 py-5 my-5 text-center">
+        <h1 id="peserta" class="display-5 fw-bold"></h1>
+    </div>
+    <div class="row" id="main-lomba">
+        {% for lomba in detail %}
+            <div class="col-sm-6">
+                <div class="card" style="margin-bottom: 15px;">
+                    <img src="{{ lomba.situsKarya }}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ lomba.namaKarya }}</h5>
+                        <p class="card-text">{{ lomba.detailKeterangan }}</p>
+                        <p class="card-text"><small class="text-muted">Jumlah Vote: {{ lomba.jumlahVote }}</small></p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
 
 {% endblock content %}
