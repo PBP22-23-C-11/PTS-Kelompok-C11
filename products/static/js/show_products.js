@@ -4,7 +4,7 @@ $(document).ready(function(){
         for (i=0; i<data.length; i++){
             $("#card-row").append(`
             <div class="card-col col">
-                <div class="card shadow-xl m-auto h-100 duration-300 hover:scale-105" id="report-${data[i].pk}">
+                <div class="card shadow-xl m-auto h-100 duration-300 hover:scale-105" id="product-${data[i].pk}">
                     <div class="card-body">
                         <div class="grid grid-cols-6 gap-7 content-start">
                             <div class="col-span-5"><h1 class="card-title font-bold text-red-500 text-xl">${data[i].fields.product_name}</h1></div>
@@ -35,7 +35,7 @@ $(document).ready(function(){
         $.ajax({url:"/products/add/", data:product, method:"POST"}).done(function(add) {
             $("#card-row").append(`
             <div class="card-col col">
-                <div class="card shadow-xl m-auto h-100 duration-300 hover:scale-105" id="report-${add.pk}">
+                <div class="card shadow-xl m-auto h-100 duration-300 hover:scale-105" id="product-${add.pk}">
                     <div class="card-body">
                         <div class="grid grid-cols-6 gap-7 content-start">
                             <div class="col-span-5"><h1 class="card-title font-bold text-red-500 text-xl">${add.fields.product_name}</h1></div>
@@ -49,7 +49,7 @@ $(document).ready(function(){
             `)
         })
         $('#add-product').on('hidden.bs.modal', function () {
-            $('#reportModal form')[0].reset(); 
+            $('#add-product form')[0].reset(); 
         });
     });
 });
