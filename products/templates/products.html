@@ -1,12 +1,68 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block meta %}
 <title>UMKM Products</title>
+<link rel="stylesheet" href="/static/css/show_products.css">
+<script src="{% static 'js/show_products.js' %}"></script>
 {% endblock meta %}
 
 {% block content %}
 
-<h1>Hello World!</h1>
-<p>Fill me!</p>
+<a class = "btn btn-primary" data-bs-toggle = "modal" data-bs-target = "#add-product">Add Product</a>
+
+<div class="container mx-auto w-100 pt-7">
+    <div class="row row-cols-1 g-4" id="card-row"></div>
+        <div class="modal fade" id="add-product" tabindex="-1" aria-labelledby="add-product-label" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5 fw-bold" id="add-product-label">Add Product</h1>
+                    </div>
+                    {% if user.is_authenticated %}
+                        {% if is_UMKM %}
+                        <div class="modal-body">
+                            <form method="POST" action="" style="display : inline-block;">
+                                {% csrf_token %}
+                                <div class="mb-2">
+                                    <h1><label class="col-form-label font-semibold">UMKM name:</label></h1>
+                                    {{form.UMKM_name}}
+                                </div>
+                                <div class="mb-2">
+                                    <h1><label class="col-form-label font-semibold">Product name:</label></h1>
+                                    {{form.product_name}}
+                                </div>
+                                <div class="mb-2">
+                                    <h1><label class="col-form-label font-semibold">Price:</label></h1>
+                                    {{form.price}}
+                                </div>
+                                <div class="mb-3">
+                                    <h1><label class="col-form-label font-semibold">Description:</label></h1>
+                                    {{form.description}}
+                                </div>
+                                <div class="mb-3">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="add-button">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button> 
+                        </div>
+                        {% else %}
+                        <div class="modal-body text-center">
+                            <h1>You're not registered as UMKM</h1>
+                            <h3>Please create an UMKM account</h3>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                    <div class="modal-body text-center">
+                        <h1>You're not logged in</h1>
+                        <h3>Please login or create new account </h3>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+</div>
 
 {% endblock content %}
