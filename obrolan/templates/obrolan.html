@@ -6,7 +6,7 @@
 {% endblock meta %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static '/css/obrolan/obrolan_css.css' %}" /> 
+<link rel="stylesheet" href="{% static 'css/obrolan/obrolan_css.css' %}" /> 
 
 <b style="color:#6B5B95; font-family:'Comic Sans MS'; ">
     <font size="5">Welcome, {{user.username}}</font>
@@ -55,6 +55,6 @@
 {{ tipe_user | json_script:"tipe_user"}}
 {{ opposite | json_script:"opposite"}}
 {{ user_and_type | json_script:"user_and_type"}}
-<script type="text/JavaScript" src="{% static '/js/obrolan/obrolan_js.js' %}"></script>
+<script type="text/JavaScript" src="{% static 'js/obrolan/obrolan_js.js' %}"></script>
 {% endblock content %}
 

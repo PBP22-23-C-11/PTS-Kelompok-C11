@@ -1,75 +1,63 @@
-<style>
-    body {
-        align-items: center;
-    }
-</style>
 <body>
 {% extends 'base.html' %}
 
 {% block meta %}
 <title>Showcase</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="js/jquery/jquery-3.1.0.js"></script>
+<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
 {% endblock meta %}
 
 {% block content %}
 <h1>Buzzar Tendants!</h1>
 
-<dialog class="modal" id="modalAdd">
-    <h3>Add my UMKM</h3>
-    <p>Hey, let's set up your shop!</p>
+{% if isUMKM and have_shop == 0%}
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-modal" id="btnAdd">Add My UMKM</button>
+{% endif %}
 
-    <label class="col-form-label">Name:</label><br>
-    <input type="text" class="form-control" id="name">
-    <br>
-    
-    <label class="col-form-label">Description:</label><br>
-    <textarea class="form-control" id="desc"></textarea>
-    <br>
-
-    <label class="col-form-label">URL:</label><br>
-    <input type="url" class="form-control" id="umkmURL">
-    <br>
-
-    <label class="col-form-label">Number:</label><br>
-    <input type="tel" class="form-control" id="number" maxlength="13">
-    <br><br>
-
-    <button type="submit" class="btn btn-success" id="doneAdd">Submit</button>
-</dialog>
+<div class="modal fade" id="add-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add My UMKM</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Hey {{ name }}, let's set up your shop!</p>
+                    {% csrf_token %}
+                    <table>
+                        {{ form.as_table }}
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="add-shop-submit" type="button" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <div class="container">
     <div class="row row-cols-1 row-cols-md-3 g-4" id="myCards">
     </div>
 </div> 
 
-{% if not type %}
-<button class="btn btn-success" id="btnAdd">Add My UMKM</button>
-{% endif %}
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="js/jquery/jquery-3.1.0.js"></script>
-<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
 <script>
-    const modalAdd = document.getElementById("modalAdd");
-    const btnAdd = document.getElementById("btnAdd");
-    const doneAdd = document.getElementById("doneAdd");
+    function show_cards() {
+        $.get('/showcase/json', function(shops) {
+            $('#myCards').empty()
+            shops.map((shop) => {
+                $('#myCards').append(`
+                    <div class
 
-    btnAdd.addEventListener('click', () => {
-        modalAdd.showModal();
-    }); 
+                `)
+            })
+        })
+    }
 
-    doneAdd.addEventListener('click', () => {
-        const name = $("#name").val();
-        const desc = $("#desc").val();
-        const umkmURL = $("#umkmURL").val();
-        const number = $("#number").val();
-        const data = {name:name, description:desc, umkm_url:umkmURL, number:number, csrfmiddlewaretoken:"{{ csrf_token }}"}
-        $.ajax({url:"/showcase/add_ajax/", data:data, method:"POST"}).done(function(resp){
-            $("myCards").append(`
-            <p>hello</p>
-            `)
-        }) 
-        modalAdd.close();
-    }); 
+
 </script>
 
 {% endblock content %}
