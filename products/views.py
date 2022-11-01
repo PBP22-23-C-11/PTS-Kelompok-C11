@@ -24,8 +24,9 @@ def add_product(request):
             product_name = form.cleaned_data['product_name']
             price = form.cleaned_data['price']
             description = form.cleaned_data['description']
-            
-            product = Product.objects.create(UMKM_name=UMKM_name, product_name=product_name, price=price, description=description, owner=request.user)
+            owner = UMKM.objects.get(user = request.user)
+                   
+            product = Product.objects.create(UMKM_name=UMKM_name, product_name=product_name, price=price, description=description, owner=owner)
 
             products = {
                 'pk' : product.pk,
