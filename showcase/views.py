@@ -1,3 +1,4 @@
+from itertools import product
 from django.shortcuts import render
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse
@@ -8,26 +9,47 @@ from showcase.forms import ShopAddForm, RateForm
 from general.models import UMKM, Customer
 from general.utils import *
 from general.constants import UserType
+from products.models import Product
 
 
 # Create your views here.
 def show_showcase(request):
     data = Shop.objects.all()
-    have_shop = Shop.objects.filter(owner=request.user).count()
-    userUMKM = (check_user_type(request.user) == UserType.UMKM)
-    userCust = (check_user_type(request.user) == UserType.Customer)
     form = ShopAddForm()
-    rate = RateForm()
+    name = ""
+    have_shop = 0
+    userUMKM = (check_user_type(request.user) == UserType.UMKM)
+    if userUMKM:
+        umkm = UMKM.objects.get(user=request.user)
+        have_shop = Shop.objects.filter(owner=umkm).count()
+        name = umkm.name
+    
     context = {
         "umkm":data,
         "user":request.user,
         "have_shop":have_shop,
         "isUMKM":userUMKM,
-        "isCust":userCust,
         "form":form,
-        "rateForm":rate,
+        "name":name
     }
     return render(request, "showcase.html", context)
+
+def show_shop(request, id):
+    data = Shop.objects.get(pk=id)
+    products = Product.objects.filter(owner=data.owner)
+    rate = RateForm()
+    name = ""
+    userCust = (check_user_type(request.user) == UserType.Customer)
+    if userCust:
+        name = Customer.objects.get(user=request.user).first_name
+    context = {
+        "umkm":data,
+        "products":products,
+        "isCustomer":userCust,
+        "rateForm":rate,
+    }
+    return render(request, "shop.html", context)
+
 
 def show_json(request):
     data = Shop.objects.all()
@@ -41,32 +63,27 @@ def add_shop(request):
     if request.method == "POST":
         form = ShopAddForm(request.POST)
         if form.is_valid():
-            shop = Shop(
-                user = request.user,
-                shop_name = form.cleaned_data["shop_name"],
-                description = form.cleaned_data["description"],
-                umkm_url = form.cleaned_data["umkm_url"],
-                number = form.cleaned_data["number"]
-            )
-            shop.save()
+            form.save()
             data = {
                 "fields":{
-                    "shop_name":shop.shop_name,
-                    "umkm_url":shop.umkm_url
+                    "shop_name":form.shop_name,
+                    "umkm_url":form.umkm_url
                 },
-                "pk":shop.pk
+                "pk":form.pk
             }
             return JsonResponse(data)
     
 @login_required
 @customer_required
 def rate_shop(request, id):
+    form = RateForm()
+    shop = Shop.objects.get(pk=id)
+
     if request.method == "POST":
-        data = Shop.objects.filter(pk=id)
-        rate = request.POST.get("rate")
-        temp = data.rating_total
-        data.rating_total = temp + rate
-        temp = data.rating_count
-        data.rating_count = temp + 1
-        data.save()
-        return JsonResponse(data)
+        form = RateForm(request.POST)
+        if form.is_valid():
+            rate = form.rating_total
+            shop.rating_count += 1
+            shop.rating_total += rate
+            shop.save()
+            return JsonResponse(shop)
