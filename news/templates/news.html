@@ -1,7 +1,110 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>News</title>
+<link rel="stylesheet" href="{% static 'css/news/news.css' %}">
+<script src="{% static 'js/news/news.js' %}"></script>
+{% if is_umkm and category == "umkm" or is_admin and category == "official" %}
+    <script src="{% static 'js/news/news-create.js' %}"></script>
+{% endif %}
+{% endblock meta %}
 
 {% block content %}
-<h1>Hello World!</h1>
-<p>Fill me!</p>
-
+<div id="news-navigation" class="my-4">
+    <ul class="nav nav-pills justify-content-center gap-2">
+        <li class="nav-item">
+            <a class="nav-link {{umkm_button_class}}" href="/news/">UMKM</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{official_button_class}}" href="/news/official/">Official</a>
+        </li>
+        {% if is_customer %}
+            <li class="nav-item">
+                <a class="nav-link {{subscribed_button_class}}" href="/news/subscribed/">Subscribed</a>
+            </li>
+        {% endif %}
+    </ul>
+</div>
+{% if is_umkm and category == "umkm" or is_admin and category == "official" %}
+<div class="d-flex justify-content-center">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-modal">
+        Create New Article
+    </button>
+</div>
+<div class="modal fade" id="create-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Create New Article</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{create_article_form.as_div}}
+                    <img id="create-article-image-preview" class="w-100">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="create-article-submit" type="button" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+<form id="search_form" class="mt-4">
+    <div id="search-form-top" class="mx-auto">
+        
+        <div id="search-form-top-div" class="d-flex">
+            <input id="title{% if category == "umkm" %}-umkm{% endif %}" type="text" name="title" class="form-control" placeholder="Search Articles">
+            {% if category == "umkm" %}
+                <input id="umkm" type="text" name="umkm" class="form-control" placeholder="UMKM">
+                <select id="umkm_type" name="umkm_type" class="form-select">
+                    <option value="">Pick Attribute</option>
+                    <option value="username">Username</option>
+                    <option value="name">Name</option>
+                </select>
+            {% endif %}
+            <button id="search-button" type="button" class="btn btn-primary">Search</button>
+        </div>
+        
+    </div>
+    <div id="search-form-bottom" class="card mx-auto my-4">
+        <div class="card-body">
+            <div id="sort-by-flex" class="d-flex justify-content-between">
+                <div>
+                    <span id="sort-by-flex-label" class="mx-4">Sort By:</span>
+                    <div class="form-check form-check-inline">
+                        <input id="sort_by_value_date" class="form-check-input" type="radio" name="sort_by_value" value="date" checked="checked">
+                        <label for="sort_by_value_date" class="form-check-label">Date</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input id="sort_by_value_likes" class="form-check-input" type="radio" name="sort_by_value" value="likes">
+                        <label for="sort_by_value_likes" class="form-check-label">Likes</label>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input id="sort_by_direction_asc" class="form-check-input" type="radio" name="sort_by_direction" value="asc">
+                        <label for="sort_by_direction_asc" class="form-check-label">Ascending</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input id="sort_by_direction_desc" class="form-check-input" type="radio" name="sort_by_direction" value="desc" checked="checked">
+                        <label for="sort_by_direction_desc" class="form-check-label">Descending</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div id="article_list" class="d-flex justify-content-center flex-wrap gap-4 mx-4 mb-4">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading</span>
+    </div>
+</div>
+<div class="d-none">
+    <span id="value-csrf-token">{{ csrf_token }}</span>
+    <span id="value-category">{{ category }}</span>
+</div>
 {% endblock content %}

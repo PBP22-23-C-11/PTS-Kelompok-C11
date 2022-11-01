@@ -1,3 +1,5 @@
+import datetime
+
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -5,16 +7,17 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
-from general.constants import UserType
+from .constants import *
 
 from .models import UMKM, Customer
-from .utils import admin_required, get_user_type, none_required, type_required, umkm_required, customer_required
+from .utils import *
 
 # General Pages
 def landing_page(request):
-    return HttpResponse('Welcome to landing page!')
+    return render(request, 'landing_page.html')
     
 # Examples
 @login_required(login_url='/login') # mengharuskan user untuk login
@@ -38,26 +41,31 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse('landing_page'))
+            response = HttpResponseRedirect(reverse('landing_page'))
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
         else:
-            messages.error('User not found')
+            messages.error(request, 'User not found')
     return render(request, 'login.html')
 
 def logout_user(request):
     logout(request)
-    return HttpResponseRedirect(reverse('login_user'))
+    response = HttpResponseRedirect(reverse('landing_page'))
+    response.delete_cookie('last_login')
+    return response
 
 def register_user(request):
+    form = UserCreationForm()
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = User.objects.create_user(username=username, password=password)
-        user.save()
-        login(request, user)
-        return JsonResponse({
-            'message': 'Akun berhasil dibuat',
-        })
-    return render(request, 'register_user.html')
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return HttpResponseRedirect(reverse('register_type'))
+        else:
+            messages.error(request, 'Data is not valid')
+    context = { 'form': form }
+    return render(request, 'register_user.html', context)
 
 @login_required(login_url='/login')
 @none_required
@@ -89,3 +97,7 @@ def register_customer(request):
             'message': 'Data Customer berhasil dimasukkan',
         })
     return HttpResponse(status=404)
+
+@login_required
+def get_logged_in_user_id(request):
+    return JsonResponse({'id':request.user.id})

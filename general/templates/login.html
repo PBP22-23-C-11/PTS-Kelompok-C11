@@ -3,59 +3,45 @@
 
 {% block meta %}
 <title>Login</title>
-<script>
-    function showMessage(message) {
-        $('#message').html(message);
-    }
-    
-    $(document).ready(function() {
-        $('#register-form').submit(function(event) {
-            event.preventDefault();
-            
-            username = $('#username').val();
-            password = $('#password').val();
-            
-            $.ajax({
-                method: 'POST',
-                url: "{% url 'login_user' %}",
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                data: {
-                    username: username,
-                    password: password,
-                },
-                success: function(data) {
-                    // TODO: Go to step 2
-                },
-                error: function(error) {
-                    console.log(error);
-                    showMessage('Error');
-                },
-            });
-        })
-    });
-</script>
+<link rel="stylesheet" href="{% static 'css/general/login.css' %}">
 {% endblock meta %}
 
 {% block content %}
-<h1>Login</h1>
-<form id="register-form">
-    <span>Name:</span>
-    <input id="username" type="text" name="username" />
-    
-    <span>Password:</span>
-    <input id="password" type="password" name="password" />
-    
-    <input type="submit" value="Next" />
-</form>
-<!-- <span id="message"></span> -->
-<ul>
-    {% if messages %}
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-    {% endif %}
-</ul>
-<span>Doesn't have an account? <a href="/register">register</a></span>
+
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-7 text-center text-lg-start">
+            <h1 class="display-4 fw-bold lh-1 mb-3">Buzzar-id</h1>
+            <p class="col-lg-10 fs-4">Login ke aplikasi</p>
+        </div>
+
+        <div class="col-md-10 mx-auto col-lg-5">
+            
+            <form id="login-form" action="" method="POST" class="p-4 p-md-5 border rounded-3 bg-light">
+                {% csrf_token %}
+                <div class="form-floating mb-3">
+                    <input id="username" type="text" name="username" class="form-control">
+                    <label for="username">Name:</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input id="password" type="password" name="password" class="form-control">
+                    <label for="password">Password:</label>
+                </div>
+                <input type="submit" value="Login" class="w-100 btn btn-lg btn-primary">
+                <hr class="my-4">
+                {% if messages %}
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+                <small class="text-center">Tidak punya akun? <a href="/register">Daftar Sekarang</a></small>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="d-none">
+    <span id="value-csrf-token">{{ csrf_token }}</span>
+</div>
+
 {% endblock content %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Pembuatan Lomba</title>
+<link rel="stylesheet" href="{% static 'css/lomba/form_template.css' %}">
+
+{% endblock meta %}
+
+{% block content %}
+<div class="mainbody">
+    <main class="form-signin w-100 m-auto">
+        <h1 class="h3 mb-3 fw-normal text-center">Buat Lomba Baru</h1>
+        <form id="form-daftar-lomba" method="POST">
+            {% csrf_token %}
+            {{ form.as_div }}
+            <div style="margin: 0 auto; display:table;">
+                <input id="daftarbtn" class="btn btn-primary" type="submit" value="Buat" style="margin-top: 15px;"/>
+            </div>
+        </form>
+    </main>
+</div>
+{% endblock content %}

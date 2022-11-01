@@ -1,7 +1,122 @@
 {% extends 'base.html' %}
 
+{% block meta %}
+<title>Perlombaan</title>
+
+<style>
+
+.feature-icon-small {
+  width: 3rem;
+  height: 3rem;
+  stroke: currentcolor;
+  stroke-width: 2;
+  fill: #0d6efd;
+}
+
+</style>
+{% endblock meta %}
+
 {% block content %}
-<h1>Hello World!</h1>
-<p>Fill me!</p>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="home" viewBox="0 0 24 24">
+        <path d="M20 9v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9"/>
+        <path d="M9 22V12h6v10M2 10.6L12 2l10 8.6"/>
+    </symbol>
+
+    <symbol id="addnew" viewBox="0 0 24 24">
+        <path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path>
+        <polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon>
+    </symbol>
+
+    <symbol id="lihatLomba" viewBox="0 0 24 24">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+    </symbol>
+
+    <symbol id="admin" viewBox="0 0 24 24">
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+    </symbol>
+</svg>
+
+{% if user.is_authenticated %}
+<div class="container px-4 py-5">
+
+    <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
+        <div class="d-flex flex-column align-items-start gap-2">
+            <h3 class="fw-bold">Selamat datang, {{ user.username }}!</h3>
+            <p class="text-muted">Silahkan pilih menu yang tersedia.</p>
+            <p class="text-muted">Login Terakhir: {{ last_login }}</p>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 g-4">
+            <div class="d-flex flex-column gap-2">
+                <div
+                class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                <svg class="bi" width="1em" height="1em">
+                    <use xlink:href="#home" />
+                </svg>
+                </div>
+                <h4 class="fw-semibold mb-0"><a class="link-dark text-decoration-none" href="../">Halaman Awal</a></h4>
+                <p class="text-muted">Kembali ke halaman awal.</p>
+            </div>
+
+            <div class="d-flex flex-column gap-2">
+                <div
+                class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                <svg class="bi" width="1em" height="1em">
+                    <use xlink:href="#lihatLomba" />
+                </svg>
+                </div>
+                <h4 class="fw-semibold mb-0"><a class="link-dark text-decoration-none" href="all/">Lihat Lomba</a></h4>
+                <p class="text-muted">Melihat perlombaan yang masih dibuka.</p>
+            </div>
+
+            {% if check == 2 %}
+            <div class="d-flex flex-column gap-2">
+                <div
+                class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                <svg class="bi" width="1em" height="1em">
+                    <use xlink:href="#addnew" />
+                </svg>
+                </div>
+                <h4 class="fw-semibold mb-0"><a class="link-dark text-decoration-none" href="buat/">Buat Lomba</a></h4>
+                <p class="text-muted">Membuat perlombaan baru (Khusus Admin).</p>
+            </div>
+
+            <div class="d-flex flex-column gap-2">
+                <div
+                class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                <svg class="bi" width="1em" height="1em">
+                    <use xlink:href="#admin" />
+                </svg>
+                </div>
+                <h4 class="fw-semibold mb-0"><a class="link-dark text-decoration-none" href="/admin/">Pengaturan Admin</a></h4>
+                <p class="text-muted">Membuka halaman pengaturan (Khusus Admin).</p>
+            </div>
+            {% endif %}
+
+    </div>
+</div>
+
+{% else %}
+<div class="text-center" style="height: calc(100vh - 72px);">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <header class="mb-auto"></header>
+    
+        <main class="px-3">
+            <h1>Selamat datang pada halaman Lomba</h1>
+            <p class="lead">Silahkan login terlebih dahulu untuk mengakses seluruh fitur atau lihat seluruh perlombaan saja</p>
+                <a href="/login/" class="btn btn-lg btn-primary" style="margin-right: 15px">Login</a>
+                <a href="all/" class="btn btn-lg btn-primary">Lihat Lomba</a>
+        </main>
+    
+        <footer class="mt-auto text-black-50">
+            <p>Cover template for <a href="https://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>, customized by <a href="https://github.com/kevin-alex-12">Kevin Alexander</a>.</p>
+        </footer>
+    </div>
+</div>
+{% endif %}
 
 {% endblock content %}

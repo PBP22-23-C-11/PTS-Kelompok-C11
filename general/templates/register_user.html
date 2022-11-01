@@ -3,61 +3,32 @@
 
 {% block meta %}
 <title>Register</title>
-<script>
-    function showMessage(message) {
-        $('#message').html(message);
-    }
-    
-    $(document).ready(function() {
-        $('#register-form').submit(function(event) {
-            event.preventDefault();
-            
-            username = $('#username').val();
-            password = $('#password').val();
-            passwordVerify = $('#password-verify').val();
-            
-            if (password != passwordVerify) {
-                showMessage('Password tidak sesuai');
-                return;
-            }
-            
-            $.ajax({
-                method: 'POST',
-                url: "{% url 'register_user' %}",
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                data: {
-                    username: username,
-                    password: password,
-                },
-                success: function(data) {
-                    window.location = '/register-type/'
-                },
-                error: function(error) {
-                    console.log(error);
-                    showMessage('Error');
-                },
-            });
-        })
-    });
-</script>
+<link rel="stylesheet" href="{% static 'css/general/register_1.css' %}">
+<script src="{% static 'js/general/register-page.js' %}"></script>
 {% endblock meta %}
 
 {% block content %}
-<h1>Register Step 1</h1>
-<form id="register-form">
-    <span>Username:</span>
-    <input id="username" type="text" name="username" />
-    
-    <span>Password:</span>
-    <input id="password" type="password" name="password" />
-    
-    <span>Re-type Password:</span>
-    <input id="password-verify" type="password" name="password-verify" />
-    
-    <input type="submit" value="Next" />
-</form>
-<span id="message"></span>
-<span>Already have an account? <a href="/login">login</a></span>
+<div id="center-flex" class="d-flex justify-content-center my-4">
+    <div id="card-container" class="card" action="" method="POST">
+        <div class="card-body">
+            <h3 class="card-title text-center">Register</h3>
+            <p class="text-center">Step 1</p>
+            <form id="register-1-form" action="" method="POST">
+                {% csrf_token %}
+                {{ form.as_div }}
+                <div class="d-flex justify-content-center">
+                    <input type="submit" value="Submit" class="btn btn-primary">
+                </div>
+            </form>
+            {% if messages %}
+                <ul class="errorlist">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <span class="d-block mt-4">Already have an account? <a href="/login/">Login</a></span>
+        </div>
+    </div>
+</div>
 {% endblock content %}
