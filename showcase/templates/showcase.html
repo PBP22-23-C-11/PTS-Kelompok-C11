@@ -11,39 +11,33 @@
 {% block content %}
 <h1>Buzzar Tendants!</h1>
 
-<dialog class="modal" id="modalRate">
-    <h3>Rate the UMKM</h3>
-    <p>Hey {{ user.username }}, what do you think about this UMKM?</p>
-    <form method="POST">
-        {% csrf_token %}
-        <table>
-            {{ rateForm.as_table }}
-            <tr>
-                <td></td>
-                <td><button type="submit" class="btn btn-success" id="doneRate"></button></td>
-            </tr>
-        </table>
-    </form>    
-</dialog>
-
-<dialog class="modal" id="modalAdd">
-    <h3>Add my UMKM</h3>
-    <p>Hey {{ user.username }}, let's set up your shop!</p>
-    <form method="POST">
-        {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-            <tr>
-                <td></td>
-                <td><button type="submit" class="btn btn-success" id="doneAdd">Submit</button></td>
-            </tr>
-        </table>
-    </form>
-</dialog>
-
 {% if isUMKM and have_shop == 0%}
-<button class="btn btn-success" id="btnAdd">Add My UMKM</button>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-modal" id="btnAdd">Add My UMKM</button>
 {% endif %}
+
+<div class="modal fade" id="add-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add My UMKM</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Hey {{ name }}, let's set up your shop!</p>
+                    {% csrf_token %}
+                    <table>
+                        {{ form.as_table }}
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="add-shop-submit" type="button" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <div class="container">
     <div class="row row-cols-1 row-cols-md-3 g-4" id="myCards">
@@ -51,44 +45,17 @@
 </div> 
 
 <script>
-    const modalAdd = document.getElementById("modalAdd");
-    const btnAdd = document.getElementById("btnAdd");
-    const doneAdd = document.getElementById("doneAdd");
+    function show_cards() {
+        $.get('/showcase/json', function(shops) {
+            $('#myCards').empty()
+            shops.map((shop) => {
+                $('#myCards').append(`
+                    <div class
 
-    const modalRate = document.getElementById("modalRate");
-    const doneRate = document.getElementById("doneRate");
-
-    btnAdd.addEventListener('click', () => {
-        modalAdd.showModal();
-    }); 
-
-    doneAdd.addEventListener('click', () => {
-        const name = $("#name").val();
-        const desc = $("#desc").val();
-        const umkmURL = $("#umkmURL").val();
-        const number = $("#number").val();
-        const data = {shop_name:name, description:desc, umkm_url:umkmURL, number:number, csrfmiddlewaretoken:"{{ csrf_token }}"}
-        $.ajax({url:"/showcase/add_ajax/", data:data, method:"POST"}).done(function(resp){
-            $("myCards").append(`
-            <div class="col" id="card${resp/pk}">
-                <div class="card h-100 border-danger">
-                    <div class="card-body d-flex flex-column">
-                        <h4 class="card-title">${resp.fields.shop_name}</h4>
-                        <h6 class="card-subtitle mb-2 text-muted">By ${resp.fields.umkm_url}</h6>
-                        <div class="flex justify-between gap-3">
-                            <div class="flex flex-col justify-center rounded">
-                                <button class="btn btn-success">Show more...</button>    
-                                <button class="btn btn-success">Rate Shop</button> 
-                            </div>
-                        </div>    
-                    </div>
-                </div>
-            </div>
-            `)
-        }) 
-        modalAdd.close();
-        btnAdd.style.display = "none";
-    }); 
+                `)
+            })
+        })
+    }
 
 
 </script>
