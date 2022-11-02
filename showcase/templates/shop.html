@@ -1,19 +1,84 @@
 <body>
     {% extends 'base.html' %}
-    
+    {% load static %}
     {% block meta %}
     <title>UMKM</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="js/jquery/jquery-3.1.0.js"></script>
     <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/showcase/shop.css' %}">
     {% endblock meta %}
     
-    {% block content %}
-    <h1>UMKM!</h1>
+    {% block content %}   
+    <div class="mb-4">
+        <img src="{{ umkm.image }}" class="w-100" style="object-fit:cover; height:200px; filter:brightness(50%);">
+    </div>
     
-    {% if isCustomer %}
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rate-modal" id="btnAdd">Rate</button>
-    {% endif %}
+    <div class="container">
+        <h1>{{ umkm.shop_name }}</h1>
+        
+        <h6 id="rating-text">{% if rate == 5 %}
+            ⭐⭐⭐⭐⭐ 
+            {% elif rate >= 4 %}
+            ⭐⭐⭐⭐   
+            {% elif rate >= 3 %}
+            ⭐⭐⭐      
+            {% elif rate >= 2 %}
+            ⭐⭐        
+            {% else %}
+            ⭐           
+            {% endif %}
+            <small>({{ umkm.rating_count }}) | {{ umkm.category }}</small>
+        </h6>
+        <hr style="color:black;">
+        <p>{{ umkm.description }}</p>
+        <p>Contact:</p>
+        <p>🌐 <a href="{{ umkm.umkm_url }}">{{ umkm.umkm_url }}</a></p>
+        <p>📞 {{ umkm.number }}</p>
+        <a class="btn btn-warning" style="margin-right: 5px;" href="/showcase/">Back</a>
+        {% if isAdmin or isCustomer %}
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rate-modal" id="btnRate">Rate</button>
+        {% endif %}
+    </div>
+
+    <br>
+    <div class="row" style="display:flex">
+        <div class="col-md-12">
+            <div id="carousel-ctn" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carousel-ctn" data-bs-slide-to="0" class="active"></button>
+                    <button type="button" data-bs-target="#carousel-ctn" data-bs-slide-to="1"></button>
+                </div>
+                <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="d-block w-100" src="https://images.unsplash.com/photo-1535401991746-da3d9055713e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1163&q=80" style="object-fit:cover; height:350px; filter:brightness(30%)" alt="First slide">
+                    <div class="carousel-caption">
+                        <h1>What's To Offer?</h1>
+                        <p>Our amazing tendants provide a variety of products that you can see and buy</p>
+                        <a class="btn btn-secondary" href="/products/">Find out</a>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="https://images.unsplash.com/photo-1571841591263-777bbba1348c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1061&q=80" style="object-fit:cover; height:350px; filter:brightness(30%);" alt="Second slide">
+                    <div class="carousel-caption">
+                        <h1>Best Of The Best</h1>
+                        <p>Amazing UMKMs and Products are being showed off and compete on the daily. Vote and find out which one is the best of them all</p>
+                        <a class="btn btn-secondary" href="/lomba/">Vote now</a>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-ctn" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel-ctn" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br>
 
     <div class="modal fade" id="rate-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -32,18 +97,13 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button id="create-article-submit" type="button" class="btn btn-success">Submit</button>
+                        <button id="rate-shop-submit" type="button" class="btn btn-success" data-bs-dismiss="modal">Submit</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    
-    <script>
-        
-    
-    
-    </script>
-    
+
+    <script src="{% static 'js/showcase/shop.js' %}"></script>    
     {% endblock content %}
     </body>

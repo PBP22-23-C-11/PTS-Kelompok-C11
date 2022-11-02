@@ -104,7 +104,7 @@ class RateForm(forms.ModelForm):
         model = Shop
         fields = ["rating_total"]
 
-    rating_count = forms.IntegerField(
+    rating_total = forms.IntegerField(
         label = "Rating",
         required = True,
         max_value = 5,
