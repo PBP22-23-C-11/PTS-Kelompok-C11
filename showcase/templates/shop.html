@@ -103,6 +103,8 @@
             </div>
         </div>
     </div>
+    <input hidden id="for-csrf" value="{{ csrf_token }}">
+    <input hidden id="for-pk" value="{{ umkm.pk }}">
 
     <script src="{% static 'js/showcase/shop.js' %}"></script>    
     {% endblock content %}
