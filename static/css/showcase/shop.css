@@ -1,0 +1,12 @@
+.container {
+    background: rgb(126,126,126);
+    background: linear-gradient(90deg, rgba(126,126,126,1) 0%, rgba(170,170,170,1) 58%, rgba(218,218,218,1) 100%);
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 8rem;
+    margin-bottom: 8rem;
+    box-shadow: 8pt 6pt 10pt rgb(94, 94, 94);
+}
+body {
+    background-color: rgb(220, 220, 220);    
+}

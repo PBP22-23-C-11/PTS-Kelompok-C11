@@ -1,4 +1,3 @@
-from itertools import product
 from django.shortcuts import render
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse
@@ -9,7 +8,6 @@ from showcase.forms import ShopAddForm, RateForm
 from general.models import UMKM, Customer
 from general.utils import *
 from general.constants import UserType
-from products.models import Product
 
 
 # Create your views here.
@@ -36,17 +34,18 @@ def show_showcase(request):
 
 def show_shop(request, id):
     data = Shop.objects.get(pk=id)
-    products = Product.objects.filter(owner=data.owner)
     rate = RateForm()
     name = ""
     userCust = (check_user_type(request.user) == UserType.Customer)
     if userCust:
         name = Customer.objects.get(user=request.user).first_name
+    rating = data.rating_total/data.rating_count
     context = {
         "umkm":data,
-        "products":products,
         "isCustomer":userCust,
         "rateForm":rate,
+        "name":name,
+        "rate":rating
     }
     return render(request, "shop.html", context)
 
@@ -63,13 +62,22 @@ def add_shop(request):
     if request.method == "POST":
         form = ShopAddForm(request.POST)
         if form.is_valid():
-            form.save()
+            shop = Shop(owner=UMKM.objects.get(user=request.user),
+                    shop_name=form.cleaned_data["shop_name"],
+                    category=form.cleaned_data["category"],
+                    description=form.cleaned_data["description"],
+                    umkm_url=form.cleaned_data["umkm_url"],
+                    number=form.cleaned_data["number"],
+                    image=form.cleaned_data["image"])
+            shop.save()
             data = {
                 "fields":{
-                    "shop_name":form.shop_name,
-                    "umkm_url":form.umkm_url
+                    "shop_name":form.cleaned_data["shop_name"],
+                    "umkm_url":form.cleaned_data["umkm_url"],
+                    "category":form.cleaned_data["category"],
+                    "image":form.cleaned_data["image"]
                 },
-                "pk":form.pk
+                "pk":shop.pk
             }
             return JsonResponse(data)
     
@@ -82,8 +90,7 @@ def rate_shop(request, id):
     if request.method == "POST":
         form = RateForm(request.POST)
         if form.is_valid():
-            rate = form.rating_total
+            rate = form.cleaned_data["rating_total"]
             shop.rating_count += 1
             shop.rating_total += rate
             shop.save()
-            return JsonResponse(shop)

@@ -1,10 +1,10 @@
 CATEGORY_CHOICES = [
-    ("SEL", "-----SELECT-----"),
-    ("FNB", "Food and Beverages"),
-    ("FSH", "Fashion"),
-    ("AGR", "Agriculture"),
-    ("ELE", "Electronic"),
-    ("FUR", "Furniture"),
-    ("SER", "Service"),
-    ("OTH", "Other"),
+    ("None", "-----SELECT-----"),
+    ("Food and Beverages", "Food and Beverages"),
+    ("Fashion", "Fashion"),
+    ("Agriculture", "Agriculture"),
+    ("Electronic", "Electronic"),
+    ("Furniture", "Furniture"),
+    ("Service", "Service"),
+    ("Other", "Other"),
 ]
