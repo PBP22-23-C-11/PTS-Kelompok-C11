@@ -1,0 +1,15 @@
+.card:hover {
+    transform: scale(1.02);
+}
+body {
+    background-color: white;
+    text-align: center;
+}
+.container {
+    background-color: antiquewhite;
+    margin-top: 0.5%;
+    width: 90%;
+    padding: 10px;
+    border-radius: 25px;
+    display: block;
+}

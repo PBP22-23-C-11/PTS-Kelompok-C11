@@ -1,7 +1,74 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>UMKM Products</title>
+<link rel="stylesheet" href="/static/css/show_products.css">
+<script src="{% static 'js/show_products.js' %}"></script>
+{% endblock meta %}
 
 {% block content %}
-<h1>Hello World!</h1>
-<p>Fill me!</p>
+
+<div class="mb-4">
+    <img src="https://images.unsplash.com/photo-1540200049848-d9813ea0e120?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" class="w-100" style="object-fit:cover; height:200px; filter:brightness(50%);">
+</div>
+
+<div class="container mx-auto w-100 pt-7">
+    <div class="col-md-12 text-center mb-4"><a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-product">Add Product</a></div>
+    <div class="col-md-12 text-center mb-3 fw-bold"><h1>Our UMKM's Product</h1></div>
+    <div class="row row-cols-3 g-4" id="card-row"></div>
+        <div class="modal fade" id="add-product" tabindex="-1" aria-labelledby="add-product-label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5 fw-bold" id="add-product-label">Add Product</h1>
+                    </div>
+                    {% if user.is_authenticated %}
+                        {% if is_UMKM %}
+                        <div class="modal-body">
+                            <form method="POST" action="" style="display : inline-block;">
+                                {% csrf_token %}
+                                <div class="mb-2">
+                                    <h6><label class="col-form-label fw-bold">UMKM name :</label></h6>
+                                    {{form.UMKM_name}}
+                                </div>
+                                <div class="mb-2">
+                                    <h6><label class="col-form-label fw-bold">Product name :</label></h6>
+                                    {{form.product_name}}
+                                </div>
+                                <div class="mb-2">
+                                    <h6><label class="col-form-label fw-bold">Price :</label></h6>
+                                    {{form.price}}
+                                </div>
+                                <div class="mb-3">
+                                    <h6><label class="col-form-label fw-bold">Description :</label></h6>
+                                    {{form.description}}
+                                </div>
+                                <div class="mb-3">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="add-button">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button> 
+                        </div>
+                        {% else %}
+                        <div class="modal-body text-center">
+                            <h1>⚠</h1>
+                            <h2 class="fw-bold">You're not registered as UMKM</h2>
+                            <h6 class="fw-light">Please create an UMKM account</h6>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                    <div class="modal-body text-center">
+                        <h1>⚠</h1>
+                        <h2 class="fw-bold">You're not logged in</h2>
+                        <h6 class="fw-light">Please login or create new account </h6>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+</div>
 
 {% endblock content %}

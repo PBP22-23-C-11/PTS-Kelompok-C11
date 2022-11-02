@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>News</title>
+<link rel="stylesheet" href="{% static 'css/news/news.css' %}">
+{% if category == "umkm" %}
+    <!-- <script>
+        function submitForm() {
+            $.ajax({
+                method: 'GET',
+                url: "{% url 'news:article' %}",
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}',
+                },
+                data: {
+                    title: title,
+                    sort_by: sortBy,
+                    category: 'umkm',
+                    umkm: umkm,
+                    umkm_type: umkmType,
+                },
+                success: function(data) {
+                    refreshArticleList(data);
+                },
+                error: function(error) {
+                    alert('Error on fetching articles from server.')
+                },
+            });
+        }
+    </script> -->
+{% elif category == "official" %}
+    <!-- <script>
+        function submitForm() {
+            $.ajax({
+                method: 'GET',
+                url: "{% url 'news:article' %}",
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}',
+                },
+                data: {
+                    title: title,
+                    sort_by: sortBy,
+                    category: 'official',
+                },
+                success: function(data) {
+                    refreshArticleList(data);
+                },
+                error: function(error) {
+                    alert('Error on fetching articles from server.')
+                },
+            });
+        }
+    </script> -->
+{% elif category == "subscribed" %}
+    <!-- <script>
+        function submitForm() {
+            $.ajax({
+                method: 'GET',
+                url: "{% url 'news:article' %}",
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}',
+                },
+                data: {
+                    title: title,
+                    sort_by: sortBy,
+                    category: 'subscribed',
+                },
+                success: function(data) {
+                    refreshArticleList(data);
+                },
+                error: function(error) {
+                    alert('Error on fetching articles from server.')
+                },
+            });
+        }
+    </script> -->
+{% endif %}
+<script>
+    let title;
+    let umkm;
+    let umkmType;
+    let sortByValue;
+    let sortByDirection;
+    let sortBy;
+    
+    function updateNonSortBy() {
+        title = $('#title').val();
+        umkm = $('#umkm').val();
+        umkmType = $('#umkm_type').val();
+    }
+    
+    function updateSortBy() {
+        sortByValue = $('input[name=sort_by_value]:checked').val();
+        sortByDirection = $('input[name=sort_by_direction]:checked').val();
+        sortBy = `${sortByValue}_${sortByDirection}`;
+    }
+    
+    function refreshArticleList(data) {
+        let articleList = $('#article_list');
+        articleList.empty();
+        
+        data.articles.forEach(function(article) {
+            let title = escapeHTML(article.title);
+            let authorName = escapeHTML(article.author.name);
+            let createdAt = article.created_at;
+            createdAt = new Date(createdAt).toDateString() + " " + new Date(createdAt).toTimeString().substring(0, 8);
+            let likes = article.likes;
+            let id = article.id;
+            let imageSource = article.image;
+            if (imageSource == null) {
+                imageSource = 'https://upload.wikimedia.org/wikipedia/commons/3/39/C_Hello_World_Program.png'; // TODO: Change Placeholder
+            }
+            articleList.append(`
+                <div class="card article-card">
+                    <img src=${imageSource} class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">${title}</h5>
+                        <span class="d-block">${authorName}</span>
+                        <span class="d-block">${createdAt}</span>
+                        <span class="d-block">Likes: ${likes}</span>
+                        <a href="/news/${id}" class="btn btn-primary">Read Article</a>
+                    </div>
+                </div>
+            `);
+        });
+    }
+    
+    $(document).ready(function() {
+        updateNonSortBy();
+        updateSortBy();
+        submitForm();
+        
+        $('#search_form').submit(function(event) {
+            event.preventDefault();
+            updateNonSortBy();
+            updateSortBy();
+            submitForm();
+        });
+        
+        $('input[name=sort_by_value], input[name=sort_by_direction]').change(function() {
+            updateSortBy();
+            submitForm();
+        });
+    });
+</script>
+{% if is_umkm and category == "umkm" or is_admin and category == "official" %}
+<script>
+    function previewImage() {
+        imageURL = $('#create-article-image').val();
+        $('#create-article-image-preview').attr('src', imageURL);
+    }
+    $(document).ready(function() {
+        $('#create-article-image').blur(previewImage);
+        $('#create-article-submit').click(function() {
+            title = $('#create-article-title').val();
+            body = $('#create-article-body').val();
+            imageURL = $('#create-article-image').val();
+            
+            $.ajax({
+                method: 'POST',
+                url: "{% url 'news:article' %}",
+                headers: {
+                    'X-CSRFToken': '{{csrf_token}}',
+                },
+                data: {
+                    title: title,
+                    body: body,
+                    image: imageURL,
+                },
+                success: function(data) {
+                    window.location = `/news/${data.id}`;
+                },
+                error: function(error) {
+                    alert('Error on posting article to server.');
+                },
+            });
+        });
+    });
+</script>
+{% endif %}
+{% endblock meta %}
+
+{% block content %}
+<div id="news-navigation" class="my-4">
+    <ul class="nav nav-pills justify-content-center gap-2">
+        <li class="nav-item">
+            <a class="nav-link {{umkm_button_class}}" href="/news/">UMKM</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{official_button_class}}" href="/news/official/">Official</a>
+        </li>
+        {% if is_customer %}
+            <li class="nav-item">
+                <a class="nav-link {{subscribed_button_class}}" href="/news/subscribed/">Subscribed</a>
+            </li>
+        {% endif %}
+    </ul>
+</div>
+{% if is_umkm and category == "umkm" or is_admin and category == "official" %}
+<div class="d-flex justify-content-center">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-modal">
+        Create New Article
+    </button>
+</div>
+<div class="modal fade" id="create-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Create New Article</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{create_article_form.as_div}}
+                    <img id="create-article-image-preview" class="w-100">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="create-article-submit" type="button" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+<form id="search_form" class="mt-4">
+    <div id="search-form-top" class="mx-auto">
+        
+        <div id="search-form-top-div" class="d-flex">
+            <input id="title{% if category == "umkm" %}-umkm{% endif %}" type="text" name="title" class="form-control" placeholder="Search Articles">
+            {% if category == "umkm" %}
+                <input id="umkm" type="text" name="umkm" class="form-control" placeholder="UMKM">
+                <select id="umkm_type" name="umkm_type" class="form-select">
+                    <option value="">Pick Attribute</option>
+                    <option value="username">Username</option>
+                    <option value="name">Name</option>
+                </select>
+            {% endif %}
+            <input id="search-button" type="submit" value="Search" class="btn btn-outline-secondary">
+        </div>
+        
+    </div>
+    <div id="search-form-bottom" class="card mx-auto my-4">
+        <div class="card-body">
+            <div id="sort-by-flex" class="d-flex justify-content-between">
+                <div>
+                    <span id="sort-by-flex-label" class="mx-4">Sort By:</span>
+                    <div class="form-check form-check-inline">
+                        <input id="sort_by_value_date" class="form-check-input" type="radio" name="sort_by_value" value="date" checked="checked">
+                        <label for="sort_by_value_date" class="form-check-label">Date</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input id="sort_by_value_likes" class="form-check-input" type="radio" name="sort_by_value" value="likes">
+                        <label for="sort_by_value_likes" class="form-check-label">Likes</label>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input id="sort_by_direction_asc" class="form-check-input" type="radio" name="sort_by_direction" value="asc">
+                        <label for="sort_by_direction_asc" class="form-check-label">Ascending</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input id="sort_by_direction_desc" class="form-check-input" type="radio" name="sort_by_direction" value="desc" checked="checked">
+                        <label for="sort_by_direction_desc" class="form-check-label">Descending</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div id="article_list" class="d-flex justify-content-center flex-wrap gap-4 mx-4 mb-4">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading</span>
+    </div>
+</div>
+<div class="d-none">
+    <span id="value-csrf-token">{{ csrf_token }}</span>
+</div>
+{% endblock content %}

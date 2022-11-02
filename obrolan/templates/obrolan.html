@@ -1,7 +1,60 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Discussion</title>
+{% endblock meta %}
 
 {% block content %}
-<h1>Hello World!</h1>
-<p>Fill me!</p>
+<link rel="stylesheet" href="{% static 'css/obrolan/obrolan_css.css' %}" /> 
 
+<b style="color:#6B5B95; font-family:'Comic Sans MS'; ">
+    <font size="5">Welcome, {{user.username}}</font>
+</b>
+<div class="container">
+    <div>
+        <b style="color:#955251; font-family:verdana;"><font size="6">Discussion Forum</font></b></br>
+        {% if tipe_user != "Admin" %}
+            <button class="btn btn-primary me-3 navbar-btn" type="button" name="create-disc" id="modalButton" style="border-radius: 5px;">
+                Create Discussion
+            </button>
+        {% endif %}
+    </div>
+    <div class="row justify-content-around" id="card-container"></div>
+</div>
+
+<div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLabel">Create Discussion</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="createDiscForm" method="">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <fieldset>
+                        <b style="color:black; font-family:verdana;">Discussion Title</b> <br></br>
+                        {{ form.title }} <br></br>
+                        <b style="color:black; font-family:verdana;">Send to</b> <br></br>
+                        <select name="toWho" id="toWho"> </select><br></br>
+                        <b style="color:black; font-family:verdana;">Message</b> <br></br>
+                        {{ form.message }} <br></br>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" formnovalidate class="btn btn-success btnClick">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{ users | json_script:"users" }}
+{{ user.username | json_script:"current_user"}}
+{{ tipe_user | json_script:"tipe_user"}}
+{{ opposite | json_script:"opposite"}}
+{{ user_and_type | json_script:"user_and_type"}}
+<script type="text/JavaScript" src="{% static 'js/obrolan/obrolan_js.js' %}"></script>
 {% endblock content %}
+
