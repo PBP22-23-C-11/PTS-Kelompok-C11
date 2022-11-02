@@ -58,9 +58,10 @@ Memiliki semua basic features dengan tambahan:
 #### **_Customer_**<br>   
 Memiliki semua basic features dengan tambahan:
 1) Melakukan subskripsi UMKM news
-2) Memberikan rating terhadap UMKM dan produk-produknya
+2) Memberikan rating terhadap UMKM
 3) Melakukan _voting_ dalam perlombaan
 4) Menambahkan dan menjawab diskusi
+5) Melihat produk-produk UMKM
 
 ## Referensi 🌐
 - https://www.bi.go.id/id/g20/default.aspx
