@@ -60,7 +60,7 @@ function refreshArticleList(data) {
         let id = article.id;
         let imageSource = article.image;
         if (imageSource == null) {
-            imageSource = 'https://upload.wikimedia.org/wikipedia/commons/3/39/C_Hello_World_Program.png'; // TODO: Change Placeholder
+            imageSource = '';
         }
         articleList.append(`
             <div class="card article-card">
