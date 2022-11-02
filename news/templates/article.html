@@ -15,7 +15,9 @@
     <script src="{% static 'js/news/article-author.js' %}"></script>
 {% endif %}
 {% if is_logged_in %}
-    <script src="{% static 'js/news/article-comments.js' %}"></script>
+    {% if is_umkm or is_customer or is_admin %}
+        <script src="{% static 'js/news/article-comments.js' %}"></script>
+    {% endif %}
 {% endif %}
 {% endblock meta %}
 
@@ -56,16 +58,20 @@
     <hr>
     <div id="comment-container" class="mx-auto">
         {% if is_logged_in %}
-            <span><b>Post Comment:</b></span>
-            <form id="post-comment" class="mt-2">
-                {% csrf_token %}
-                {{comment_form.as_table}}
-                <div class="d-flex justify-content-center mt-2">
-                    <button id="post-comment-button" type="button" class="btn btn-primary mb-2">Post</button>
-                </div>
-            </form>
-            <span class="d-block mb-2"><b>Comments:</b></span>
-            <div id="comment_list"></div>
+            {% if is_umkm or is_customer or is_admin %}
+                <span><b>Post Comment:</b></span>
+                <form id="post-comment" class="mt-2">
+                    {% csrf_token %}
+                    {{comment_form.as_table}}
+                    <div class="d-flex justify-content-center mt-2">
+                        <button id="post-comment-button" type="button" class="btn btn-primary mb-2">Post</button>
+                    </div>
+                </form>
+                <span class="d-block mb-2"><b>Comments:</b></span>
+                <div id="comment_list"></div>
+            {% else %}
+                <span class="d-block text-center">You need to complete register step 2 in order to see and create comments. <a href="/register-type/">Register Step 2</a></span>
+            {% endif %}
         {% else %}
             <span class="d-block text-center">You need to login in order to see and create comments. <a href="/login/">Login</a></span>
         {% endif %}
