@@ -15,8 +15,10 @@ Proyek ini dibuat oleh kelompok C-11 yang beranggotakan:
 4. [Muhammad Nabiel Andityo Purnomo](https://github.com/mnabielap) (2106750465)
 5. [Vania Azria Wardani](https://github.com/vaniaazr) (2106650380)
 
-## Link Aplikasi Heroku 💻
-https://buzzar-id.herokuapp.com/
+## Link Aplikasi 💻
+https://buzzar-id.up.railway.app/
+
+Sebelum Migrasi: https://buzzar-id.herokuapp.com/
 
 ## Overview 🌐
 Forum G20 merupakan forum kerja sama multilateral yang terdiri dari 19 negara utama dan Uni Eropa. G20 dibentuk pada 1999 atas inisiasi anggota G7. Forum G20 merangkul negara maju dan berkembang untuk bersama-sama mengatasi krisis dan bertujuan mewujudkan pertumbuhan global yang kuat, berkelanjutan, seimbang, dan inklusif. Pada tahun 2022, Indonesia memegang presidensi G20. Tema Presidensi G20 Indonesia 2022 yang diusung adalah *Recover Together, Recover Stronger*. Dengan tema tersebut, Indonesia mengajak seluruh dunia untuk saling mendukung pulih bersama serta tumbuh lebih kuat dan berkelanjutan. 
