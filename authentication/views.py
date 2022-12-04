@@ -16,7 +16,11 @@ def api_login(request):
             return JsonResponse({
                 'status': True,
                 'message': 'Successfully Logged In!',
-                # Insert any extra data if you want to pass data to Flutter
+                'data': {
+                    'username': request.user.username,
+                    'name': get_user_name(request.user),
+                    'type': get_user_type_string(request.user),
+                },
             }, status=200)
         else:
             return JsonResponse({
