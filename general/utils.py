@@ -83,4 +83,17 @@ def get_user_name(user):
         return user.umkm.name
     elif user_type == UserType.Admin:
         return user.first_name + " " + user.last_name
-    return user.customer.first_name + " " + user.customer.last_name
+    elif user_type == UserType.Customer:
+        return user.customer.first_name + " " + user.customer.last_name
+    else:
+        return ''
+
+def get_user_type_string(user):
+    user_type = check_user_type(user)
+    if user_type == UserType.UMKM:
+        return 'UMKM'
+    elif user_type == UserType.Admin:
+        return 'Admin'
+    elif user_type == UserType.Customer:
+        return 'Customer'
+    return 'None'

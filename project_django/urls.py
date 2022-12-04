@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from general.views import *
-from authentication.views import api_login, api_logout
+from authentication.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,6 +35,7 @@ urlpatterns = [
     path('api/get-user-id/', get_logged_in_user_id, name='get_logged_in_user_id'),
     path('api/login/', api_login, name='api_login'),
     path('api/logout/', api_logout, name='api_logout'),
+    path('api/user-data/', api_user_data, name='api_user_data'),
     path('test/umkm-only/', example_umkm_only_page, name='umkm-only'),
     path('test/customer-only/', example_customer_only_page, name='customer-only'),
 ]
