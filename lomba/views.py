@@ -98,6 +98,12 @@ def peserta_lomba_json(request, id):
     pesertaLomba = DetailLomba.objects.all().filter(id=id)
     return HttpResponse(serializers.serialize("json", pesertaLomba), content_type="application/json")
 
+# Ambil peserta suatu lomba
+def peserta_lomba(request, id):
+    lomba = Lomba.objects.get(id=id)
+    detail = DetailLomba.objects.filter(lomba=lomba)
+    return HttpResponse(serializers.serialize("json", detail), content_type="application/json")
+
 # Tampilkan seluruh data peserta lomba
 # id berasal dari Lomba
 def data_lomba(request, id):
