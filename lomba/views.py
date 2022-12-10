@@ -26,8 +26,9 @@ def show_lomba(request):
     return render(request, "lomba.html", context)
 
 # Untuk membuat lomba baru (khusus admin)
-@login_required(login_url='/login')
-@admin_required
+# @login_required(login_url='/login')
+# @admin_required
+@csrf_exempt
 def buat_lomba(request):
     form = LombaForm()
 
