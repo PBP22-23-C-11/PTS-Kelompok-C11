@@ -27,7 +27,7 @@ def show_obrolan(request):
     users = User.objects.all()
     opposite_user = []
     for user in users:
-        if (type != check_user_type(user)) and (check_user_type(user) != 2):
+        if (type != check_user_type(user)) and (check_user_type(user) != 2) and (check_user_type(user) != None):
             opposite_user.append(user.username)
 
     user_and_type = dict()
@@ -85,9 +85,15 @@ def delete_disc(request, id):
 @csrf_exempt
 def create_diskusi_flutter(request):
     if request.method == 'POST':
-        user = request.user
         data = json.loads(request.body)
         username = data["username"]
+        try:
+            user = User.objects.get(username = username)
+        except:
+            try:
+                user = User.objects.create_user('4oa4_qz8dvgr3dbrblwf', 'dummyuser1@thebeatles.com', 'dummyPassword890')
+            except:
+                user = User.objects.get(username = '4oa4_qz8dvgr3dbrblwf')
         date = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=7)
         title = data["title"]
         toWho = data["toWho"]

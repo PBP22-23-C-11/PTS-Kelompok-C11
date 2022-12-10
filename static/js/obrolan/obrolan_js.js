@@ -28,9 +28,11 @@ function displayCards(json) {
         var from = fields.username;
         var to = fields.toWho;
 
-        var type_from = ` [`+user_and_type[from]+`]`;
+        var type_from = "";
+        if (from in user_and_type)
+            var type_from = ` [`+user_and_type[from]+`]`;
         var type_to = "";
-        if (!to.startsWith("All"))
+        if (!to.startsWith("All") && to in user_and_type)
             var type_to = ` [`+user_and_type[to]+`]`;
             
         if ((from==current_user) || (to==current_user) || (to==`All `+tipe_user)) {
