@@ -1,4 +1,5 @@
 from audioop import reverse
+import json
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
@@ -80,3 +81,18 @@ def delete_disc(request, id):
         disc = get_object_or_404(Diskusi, pk=id, user=request.user)
         disc.delete()
         return JsonResponse({'error':False})
+
+@csrf_exempt
+def create_diskusi_flutter(request):
+    if request.method == 'POST':
+        user = request.user
+        data = json.loads(request.body)
+        username = data["username"]
+        date = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=7)
+        title = data["title"]
+        toWho = data["toWho"]
+        message = data["message"]
+        Diskusi.objects.create(user=user, username=username, date=date, title=title, toWho=toWho, message=message)
+        return JsonResponse({"status": "success"}, status = 200)
+    else:
+        return JsonResponse({"status": "error"}, status = 401)
