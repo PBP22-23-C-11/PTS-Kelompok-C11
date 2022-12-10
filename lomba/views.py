@@ -88,16 +88,23 @@ def vote_lomba(request, id):
 def vote_flutter(request, id):
     if request.method == 'POST':
         dataLomba = DetailLomba.objects.get(id=id)
-        dataLomba.jumlahVote += 1
-        dataLomba.save()
-
-        pemilih = Voting()
         person = request.POST.get('customer')
-        pemilih.pemilih = User.objects.get(username=person)
-        pemilih.lomba = dataLomba.lomba
-        pemilih.save()
+        temp = User.objects.get(username=person)
 
-        return HttpResponse("Vote berhasil", content_type="text/plain")
+        try:
+            voting = Voting.objects.get(pemilih=temp, lomba=dataLomba.lomba)
+            return HttpResponse("gagal", content_type="text/plain")
+
+        except:
+            dataLomba.jumlahVote += 1
+            dataLomba.save()
+
+            pemilih = Voting()
+            pemilih.pemilih = temp
+            pemilih.lomba = dataLomba.lomba
+            pemilih.save()
+
+            return HttpResponse("berhasil", content_type="text/plain")
 
 # Untuk menampilkan data semua lomba
 def all_lomba(request):
