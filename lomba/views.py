@@ -7,6 +7,7 @@ from general.utils import *
 from lomba.models import DetailLomba, Lomba, Voting
 from django.core import serializers
 from lomba.forms import LombaForm
+from django.views.decorators.csrf import csrf_exempt
 
 # Halaman utama lomba
 def show_lomba(request):
@@ -65,8 +66,9 @@ def daftar_lomba(request, id):
 
 # Untuk memberikan suara pada peserta lomba (khusus Customer)
 # id berasal dari DetailLomba (id peserta lomba)
-@login_required(login_url='/login')
-@customer_required
+# @login_required(login_url='/login')
+# @customer_required
+@csrf_exempt
 def vote_lomba(request, id):
     if request.method == 'POST':
         dataLomba = DetailLomba.objects.get(id=id)
