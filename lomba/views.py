@@ -8,6 +8,7 @@ from lomba.models import DetailLomba, Lomba, Voting
 from django.core import serializers
 from lomba.forms import LombaForm
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
 
 # Halaman utama lomba
 def show_lomba(request):
@@ -82,6 +83,21 @@ def vote_lomba(request, id):
         pemilih.save()
 
         return redirect('lomba:all_lomba')
+
+@csrf_exempt
+def vote_flutter(request, id):
+    if request.method == 'POST':
+        dataLomba = DetailLomba.objects.get(id=id)
+        dataLomba.jumlahVote += 1
+        dataLomba.save()
+
+        pemilih = Voting()
+        person = request.POST.get('customer')
+        pemilih.pemilih = User.objects.get(username=person)
+        pemilih.lomba = dataLomba.lomba
+        pemilih.save()
+
+        return HttpResponse("Vote berhasil", content_type="text/plain")
 
 # Untuk menampilkan data semua lomba
 def all_lomba(request):
