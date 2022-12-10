@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.views.decorators.csrf import csrf_exempt
 
 from general.utils import check_user_type, customer_required, get_user_type, type_required, umkm_required, get_user_name
 from general.constants import UserType
@@ -69,6 +70,7 @@ def article_page(request, article_id):
 
 # API
 # Articles
+@csrf_exempt
 def article(request):
     if request.method == 'GET':
         return get_article(request)
