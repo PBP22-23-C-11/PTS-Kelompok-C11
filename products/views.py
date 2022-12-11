@@ -44,30 +44,15 @@ def add_product(request):
 @csrf_exempt
 def add_product_flutter(request):
     if request.method == 'POST':
-        person = request.POST.get('umkm')
-        temp = User.objects.get(username=person)
-
-        form = AddProductForm(request.POST)
-        if form.is_valid():
-            UMKM_name = form.cleaned_data['UMKM_name']
-            product_name = form.cleaned_data['product_name']
-            price = form.cleaned_data['price']
-            description = form.cleaned_data['description']
-            owner = temp
-                   
-            product = Product.objects.create(UMKM_name=UMKM_name, product_name=product_name, price=price, description=description, owner=owner)
-
-            products = {
-                'pk' : product.pk,
-                'fields' : {
-                    'UMKM_name' : product.UMKM_name,
-                    'product_name' : product.product_name,
-                    'price' : product.price,
-                    'description' : product.description,
-                }
-            }
-            return JsonResponse(products)
-        return HttpResponseBadRequest()
+        UMKM_name = request.POST.get("UMKM_name")
+        product_name = request.POST.get("product_name")
+        price = request.POST.get("price")
+        description = request.POST.get("description")
+        product = Product(UMKM_name=UMKM_name, product_name=product_name, price=price, description=description, owner=UMKM.objects.get(user = request.user))
+        product.save()
+        return JsonResponse({"instance":"Project created"}, status=200)
+    else:
+        return JsonResponse({"Failed"}, status=404)
 
 def show_json(request):
     data = Product.objects.all()
