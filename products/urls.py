@@ -10,5 +10,5 @@ urlpatterns = [
     path('', show_products, name='show_products'),
     path('add/', add_product, name='add_product'),
     path('json/', show_json, name='show_json'),
-    path('flutter/add/', add_product_flutter, name='add_product_flutter'),
+    path('add-flutter/', add_product_flutter, name='add_product_flutter'),
 ]
