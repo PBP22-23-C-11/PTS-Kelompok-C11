@@ -293,6 +293,7 @@ def delete_article_comment_by_id_get(request, article_id, comment_id):
     return HttpResponse(status=404)
 
 # Like
+@csrf_exempt
 @login_required
 @customer_required
 def like(request, article_id):
@@ -331,7 +332,28 @@ def check_like(request, article):
     else:
         return JsonResponse({'liked':False, 'count':like_count})
 
+@csrf_exempt
+@login_required
+@customer_required
+def toggle_like_get(request, article_id):
+    try:
+        article = Article.objects.get(id=article_id)
+    except Article.DoesNotExist:
+        return HttpResponse(status=404)
+    like = None
+    try:
+        like = Like.objects.get(article=article, customer=request.user.customer)
+    except Like.DoesNotExist:
+        pass
+    if like is not None:
+        like.delete()
+        return JsonResponse({'success': True}, status=200)
+    else:
+        Like.objects.create(article=article, customer=request.user.customer)
+        return JsonResponse({'success': True}, status=200)
+
 # Subscribe
+@csrf_exempt
 @login_required
 @customer_required
 def subscribe(request, author_id):
@@ -368,3 +390,23 @@ def check_subscribe(request, author):
         return JsonResponse({'subscribed':True})
     else:
         return JsonResponse({'subscribed':False})
+
+@csrf_exempt
+@login_required
+@customer_required
+def toggle_subscribe_get(request, author_id):
+    try:
+        author = User.objects.get(id=author_id)
+    except User.DoesNotExist:
+        return HttpResponse(status=404)
+    subscribe = None
+    try:
+        subscribe = Subscribe.objects.get(author=author, customer=request.user.customer)
+    except Subscribe.DoesNotExist:
+        pass
+    if subscribe is not None:
+        subscribe.delete()
+        return JsonResponse({'status': True}, status=200)
+    else:
+        Subscribe.objects.create(author=author, customer=request.user.customer)
+        return JsonResponse({'status': True}, status=200)
