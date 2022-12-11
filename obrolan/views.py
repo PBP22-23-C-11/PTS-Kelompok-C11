@@ -37,7 +37,7 @@ def show_obrolan(request):
             user_and_type[user.username] = "UMKM"
         elif (type==1):
             user_and_type[user.username] = "Customer"
-        else:
+        elif (type==2):
             user_and_type[user.username] = "Admin"
 
     context = {
