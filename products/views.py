@@ -44,7 +44,7 @@ def add_product(request):
 @csrf_exempt
 def add_product_flutter(request):
     if request.method == 'POST':
-        person = request.POST.get("UMKM")
+        person = request.POST.get('umkm')
         temp = User.objects.get(username=person)
 
         form = AddProductForm(request.POST)
