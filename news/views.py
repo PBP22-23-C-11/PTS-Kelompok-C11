@@ -253,7 +253,16 @@ def post_article_comment(request, article):
         comment.user = request.user
         comment.created_at = timezone.now()
         comment.save()
-        return HttpResponse(status=201)
+        comment_json = {
+            'user': {
+                'id': comment.user.id,
+                'name': get_user_name(comment.user),
+            },
+            'id': comment.id,
+            'body': comment.body,
+            'created_at': comment.created_at,
+        }
+        return JsonResponse(comment_json, status=201)
     return HttpResponse(status=400)
 
 @login_required
