@@ -17,6 +17,7 @@ def api_login(request):
                 'status': True,
                 'message': 'Successfully Logged In!',
                 'data': {
+                    'id': user.id,
                     'username': user.username,
                     'name': get_user_name(user),
                     'type': get_user_type_string(user),
