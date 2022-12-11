@@ -209,7 +209,7 @@ def delete_article_by_id_get(request, article_id):
         return HttpResponse(status=404)
     if request.user.id == article.author_user.id:
         article.delete()
-        return HttpResponse(status=204)
+        return JsonResponse({'status': True}, status=204)
     return HttpResponse(status=404)
 
 # Comments (Accessible by logged in users only)
@@ -289,7 +289,7 @@ def delete_article_comment_by_id_get(request, article_id, comment_id):
         return HttpResponse(status=404)
     if request.user.id == comment.user.id and comment.article.id == article_id:
         comment.delete()
-        return HttpResponse(status=204)
+        return JsonResponse({'success': True}, status=204)
     return HttpResponse(status=404)
 
 # Like
