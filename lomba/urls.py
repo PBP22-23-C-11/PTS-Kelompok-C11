@@ -15,4 +15,5 @@ urlpatterns = [
     path('all/selesai/<int:id>', update_lomba, name='update_lomba'),
     path('all/peserta/json/<int:id>', peserta_lomba, name='peserta_lomba'),
     path('flutter/vote/<int:id>', vote_flutter, name='vote_flutter'),
+    path('flutter/daftar/<int:id>', daftar_lomba_flutter, name='daftar_lomba_flutter'),
 ]
