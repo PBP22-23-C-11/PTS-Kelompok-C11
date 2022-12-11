@@ -52,6 +52,7 @@ def api_user_data(request):
         return JsonResponse({
             'status': True,
             'data': {
+                'id': request.user.id,
                 'username': request.user.username,
                 'name': get_user_name(request.user),
                 'type': get_user_type_string(request.user),
