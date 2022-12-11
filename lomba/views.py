@@ -66,6 +66,30 @@ def daftar_lomba(request, id):
     }
     return render(request, 'halamandaftar.html', context)
 
+# id berasal dari Lomba yang ingin didaftarkan
+@csrf_exempt
+def daftar_lomba_flutter(request, id):
+    if request.method == 'POST':
+        person = request.POST.get('umkm')
+        temp = User.objects.get(username=person)   # Ambil data user UMKM
+
+        try:
+            cekDaftar = DetailLomba.objects.get(peserta=temp, lomba=Lomba.objects.get(id=id))
+
+            return HttpResponse("gagal", content_type="text/plain")
+
+        except:
+            daftarLomba = DetailLomba()
+            daftarLomba.lomba = Lomba.objects.get(id=id)
+            daftarLomba.peserta = temp
+            daftarLomba.namaKarya = request.POST.get('nama-karya')
+            daftarLomba.detailKeterangan = request.POST.get('keterangan')
+            daftarLomba.situsKarya = request.POST.get('situs-karya')
+            daftarLomba.save()
+
+            return HttpResponse("berhasil", content_type="text/plain")
+        
+
 # Untuk memberikan suara pada peserta lomba (khusus Customer)
 # id berasal dari DetailLomba (id peserta lomba)
 # @login_required(login_url='/login')
