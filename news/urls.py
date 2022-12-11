@@ -12,6 +12,8 @@ urlpatterns = [
     path('api/articles/<int:article_id>/', article_by_id, name='article_by_id'),
     path('api/articles/<int:article_id>/comments/', article_comments, name='article_comments'),
     path('api/articles/<int:article_id>/comments/<int:comment_id>/', article_comment_by_id, name='article_comment_by_id'),
+    path('api/articles/<int:article_id>/comments/<int:comment_id>/delete/', delete_article_comment_by_id_get, name='delete_article_comment_by_id_get'),
     path('api/articles/<int:article_id>/likes/', like, name='like'),
+    path('api/articles/<int:article_id>/delete/', delete_article_by_id_get, name='delete_article_by_id_get'),
     path('api/subscribes/<int:author_id>/', subscribe, name='subscribe'),
 ]

@@ -174,16 +174,46 @@ def article_by_id(request, article_id): # DELETE
         article = Article.objects.get(id=article_id)
     except Article.DoesNotExist:
         return HttpResponse(status=404)
+    if request.method == 'GET':
+        return get_article_by_id(request, article)
     if request.user.id == article.author_user.id:
         if request.method == 'DELETE':
             return delete_article_by_id(request, article)
     return HttpResponse(status=404)
 
+def get_article_by_id(request, article: Article):
+    article_json = {
+        'id': article.id,
+        'author': {
+            'id': article.author_user.id,
+            'name': get_user_name(article.author_user),
+        },
+        'title': article.title,
+        'body': article.body,
+        'image': article.image,
+        'created_at': article.created_at,
+        'likes': Like.objects.filter(article=article).count(),
+    }
+    return JsonResponse(article_json)
+
 def delete_article_by_id(request, article : Article):
     article.delete()
     return HttpResponse(status=204)
 
+@csrf_exempt
+@login_required
+def delete_article_by_id_get(request, article_id):
+    try:
+        article = Article.objects.get(id=article_id)
+    except Article.DoesNotExist:
+        return HttpResponse(status=404)
+    if request.user.id == article.author_user.id:
+        article.delete()
+        return HttpResponse(status=204)
+    return HttpResponse(status=404)
+
 # Comments (Accessible by logged in users only)
+@csrf_exempt
 @login_required
 @type_required(types=[UserType.Admin, UserType.UMKM, UserType.Customer])
 def article_comments(request, article_id): # GET and POST
@@ -240,6 +270,18 @@ def article_comment_by_id(request, article_id, comment_id): # DELETE
 def delete_comment(request, comment : Comment):
     comment.delete()
     return HttpResponse(status=204)
+
+@csrf_exempt
+@login_required
+def delete_article_comment_by_id_get(request, article_id, comment_id):
+    try:
+        comment = Comment.objects.get(id=comment_id)
+    except Comment.DoesNotExist:
+        return HttpResponse(status=404)
+    if request.user.id == comment.user.id and comment.article.id == article_id:
+        comment.delete()
+        return HttpResponse(status=204)
+    return HttpResponse(status=404)
 
 # Like
 @login_required
