@@ -70,7 +70,7 @@ def daftar_lomba(request, id):
 @csrf_exempt
 def daftar_lomba_flutter(request, id):
     if request.method == 'POST':
-        person = request.POST.get('customer')
+        person = request.POST.get('umkm')
         temp = User.objects.get(username=person)   # Ambil data user UMKM
 
         try:
