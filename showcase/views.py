@@ -10,6 +10,7 @@ from general.utils import *
 from general.constants import UserType
 
 import json as JSON
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
@@ -83,8 +84,7 @@ def add_shop(request):
             return JsonResponse(data)
 
 
-@login_required
-@umkm_required
+@csrf_exempt
 def add_shop_flutter(request):
 
     if request.method == "POST":
