@@ -85,11 +85,13 @@ def add_shop(request):
 
 
 @csrf_exempt
+@login_required
+@umkm_required
 def add_shop_flutter(request):
     if request.method == "POST":
         form = JSON.loads(request.body)
     
-        shop = Shop(owner=None,
+        shop = Shop(owner=UMKM.objects.get(user=request.user),
                 shop_name=form["shop_name"],
                 category=form["category"],
                 description=form["description"],
