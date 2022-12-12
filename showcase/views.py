@@ -86,29 +86,19 @@ def add_shop(request):
 
 @csrf_exempt
 def add_shop_flutter(request):
-
     if request.method == "POST":
         form = JSON.loads(request.body)
+    
+        shop = Shop(owner=None,
+                shop_name=form.cleaned_data["shop_name"],
+                category=form.cleaned_data["category"],
+                description=form.cleaned_data["description"],
+                umkm_url=form.cleaned_data["umkm_url"],
+                number=form.cleaned_data["number"],
+                image=form.cleaned_data["image"])
+        shop.save()
 
-        if form.is_valid():
-            shop = Shop(owner=UMKM.objects.get(user=request.user),
-                    shop_name=form.cleaned_data["shop_name"],
-                    category=form.cleaned_data["category"],
-                    description=form.cleaned_data["description"],
-                    umkm_url=form.cleaned_data["umkm_url"],
-                    number=form.cleaned_data["number"],
-                    image=form.cleaned_data["image"])
-            shop.save()
-            data = {
-                "fields":{
-                    "shop_name":form.cleaned_data["shop_name"],
-                    "umkm_url":form.cleaned_data["umkm_url"],
-                    "category":form.cleaned_data["category"],
-                    "image":form.cleaned_data["image"]
-                },
-                "pk":shop.pk
-            }
-            return JsonResponse({"instance": "Success!"}, status=200)
+        return JsonResponse({"instance": "Success!"}, status=200)
     
 @login_required
 @customer_required
@@ -123,3 +113,13 @@ def rate_shop(request, id):
             shop.rating_count += 1
             shop.rating_total += rate
             shop.save()
+
+def rate_shop_flutter(request):
+    if request.method == "POST":
+        form = JSON.loads(request.body)
+        shop = Shop.objects.get(pk=form.cleaned_data["id"])
+
+        shop.rating_count += 1
+        shop.save()
+
+        return JsonResponse({"instance": "Success!"}, status=200)
