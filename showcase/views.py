@@ -90,12 +90,12 @@ def add_shop_flutter(request):
         form = JSON.loads(request.body)
     
         shop = Shop(owner=None,
-                shop_name=form.cleaned_data["shop_name"],
-                category=form.cleaned_data["category"],
-                description=form.cleaned_data["description"],
-                umkm_url=form.cleaned_data["umkm_url"],
-                number=form.cleaned_data["number"],
-                image=form.cleaned_data["image"])
+                shop_name=form["shop_name"],
+                category=form["category"],
+                description=form["description"],
+                umkm_url=form["umkm_url"],
+                number=form["number"],
+                image=form["image"])
         shop.save()
 
         return JsonResponse({"instance": "Success!"}, status=200)
@@ -117,7 +117,7 @@ def rate_shop(request, id):
 def rate_shop_flutter(request):
     if request.method == "POST":
         form = JSON.loads(request.body)
-        shop = Shop.objects.get(pk=form.cleaned_data["id"])
+        shop = Shop.objects.get(pk=form["id"])
 
         shop.rating_count += 1
         shop.save()

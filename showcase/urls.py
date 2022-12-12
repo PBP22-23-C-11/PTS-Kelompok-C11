@@ -12,4 +12,5 @@ urlpatterns = [
     path('add_shop_flutter/', add_shop_flutter, name="add_shop_flutter"),
     
     path('rate_shop/<int:id>', rate_shop, name="rate_shop"),
+    path('rate_shop_flutter/', rate_shop_flutter, name="rate_shop_flutter")
 ]
