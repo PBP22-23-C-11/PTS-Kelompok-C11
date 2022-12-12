@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -43,20 +44,14 @@ def api_logout(request):
         'message': 'Successfully Logged Out!',
     }, status=200)
 
-def api_user_data(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({
-            'status': False,
-            'message': 'You are not logged in',
-        }, status=200)
-    else:
-        return JsonResponse({
-            'status': True,
-            'data': {
-                'id': request.user.id,
-                'username': request.user.username,
-                'name': get_user_name(request.user),
-                'type': get_user_type_string(request.user),
-            },
-            'message': 'You are logged in',
-        }, status=200)
+def api_user_data(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return HttpResponse(status=404)
+    return JsonResponse({
+        'id': user.id,
+        'username': user.username,
+        'name': get_user_name(user),
+        'type': get_user_type_string(user),
+    }, status=200)
