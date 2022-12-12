@@ -36,6 +36,8 @@ urlpatterns = [
     path('api/login/', api_login, name='api_login'),
     path('api/logout/', api_logout, name='api_logout'),
     path('api/user-data/<int:user_id>/', api_user_data, name='api_user_data'),
+    path('api/register/1/', api_register_one, name='api_register_one'),
+    path('api/register/2/', api_register_two, name='api_register_two'),
     path('test/umkm-only/', example_umkm_only_page, name='umkm-only'),
     path('test/customer-only/', example_customer_only_page, name='customer-only'),
 ]
