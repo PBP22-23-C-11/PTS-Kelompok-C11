@@ -116,6 +116,9 @@ def rate_shop(request, id):
             shop.rating_total += rate
             shop.save()
 
+@csrf_exempt
+@login_required
+@customer_required
 def rate_shop_flutter(request):
     if request.method == "POST":
         form = JSON.loads(request.body)
