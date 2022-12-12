@@ -168,7 +168,6 @@ def post_article(request):
         return JsonResponse(article_json)
     return HttpResponse(status=400)
 
-@login_required
 def article_by_id(request, article_id): # DELETE
     try:
         article = Article.objects.get(id=article_id)
@@ -196,6 +195,7 @@ def get_article_by_id(request, article: Article):
     }
     return JsonResponse(article_json)
 
+@login_required
 def delete_article_by_id(request, article : Article):
     article.delete()
     return HttpResponse(status=204)
